@@ -18,9 +18,12 @@ Providers (*)
 
 User_Registration_Page (X)
 
-O 는 작업이 끝난 것들
-X 은 아직 시작하지 않은 것들
-* 은 수정이 필요한 것들
+"O" 는 작업이 끝난 것들
+
+"X" 은 아직 시작하지 않은 것들
+
+"*" 은 수정이 필요한 것들
+
 입니다.
 
 현재 "로그인 버튼"과 "현재 동영상으로 진행 버튼"은 User_Registration_Page/User_Registration.dart와 연동이 되어 있으며
