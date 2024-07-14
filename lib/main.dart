@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
-import 'Fake_Splash.dart'; // SplashScreen 클래스를 임포트
+import 'package:provider/provider.dart';
+import 'providers/login_provider.dart';
+import 'providers/sign_up_provider.dart';
+import 'providers/camera_provider.dart';
+import 'Main_Page/Main_Page.dart';
+import 'Sign_Up_Page/Sign_Up_Page.dart';
+import 'Camera_Page/Camera_Page.dart';
+import 'User_Registration_Page/User_Registration.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => SignUpProvider()),
+        ChangeNotifierProvider(create: (_) => CameraProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Lottie Splash Screen',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SplashScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/signup': (context) => SignUpPage(),
+        '/camera': (context) => CameraPage(),
+        '/user_registration': (context) => UserRegistrationPage(),
+      },
     );
   }
 }
