@@ -7,7 +7,7 @@ import 'Main_Page/Main_Page.dart';
 import 'Sign_Up_Page/Sign_Up_Page.dart';
 import 'Camera_Page/Camera_Page.dart';
 import 'User_Registration_Page/User_Registration.dart';
-import 'Fake_Splash.dart'; // SplashScreen 파일을 임포트
+import 'Fake_Splash.dart';
 
 void main() {
   runApp(
@@ -26,6 +26,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Maple', // 전역 폰트 설정
+      ),
       initialRoute: '/splash', // 앱이 처음 시작할 때 스플래시 화면으로 이동
       routes: {
         '/splash': (context) => const SplashScreen(), // 스플래시 화면 경로 설정
