@@ -2,64 +2,64 @@
 
 만들고 있는 플러터 프로젝트입니다.
 
-Camera_Page (O)
+무엇을 해야 하는지 모르겠다면 Issue 탭의 EPIC, FEAT, TASK를 봐주시길 바랍니다.
 
-Main_Page (O)
+# Git에서 Commit 하는 법
 
-Sign_Up_Page (O)
+## 주의사항
 
-Dismiss_Keyboard.dart (O)
+1. EPIC은 이슈로만 올립니다.
+2. branch는 FEAT 단위로 합니다.
+3. Commit은 TASK 단위로 합니다.
 
-Fake_Splash.dart (O)
+이제 git bash를 사용하는 방법을 알려주겠습니다.
 
-main.dart (O)
+## 1. Feature 브랜치
+1-1. 새로운 기능을 개발하기 위한 브랜치입니다.
+1-2. 아래에 서술할 브랜치 규칙을 꼭 지켜주시길 바랍니다.
 
-Providers (*)
+터미널에서
 
-User_Registration_Page (X)
+git checkout -b feature/feature 이름
 
-"O" 는 작업이 끝난 것들
+이런 식으로 작성해서 브랜치를 만들면 됩니다.
 
-"X" 은 아직 시작하지 않은 것들
+* 예시: git checkout -b feature/User-Choice-Page-Layout
+* 지금 서술한 User-Choice-Page-Layout은 EPIC : UI에 있는 #2 FEAT : User Choice Page Layout을 말하는 것입니다.
+* 요약하면 FEATURE 제목으로 브랜치를 파면 됩니다.
 
-"*" 은 수정이 필요한 것들
+## 2. 작업하고 커밋하기
 
-입니다.
+현재 안드로이드 스튜디오를 쓰고 있기 때문에 git add . 을 하기 전에 git init을 해줘야 합니다.
 
-현재 "로그인 버튼"과 "현재 동영상으로 진행 버튼"은 User_Registration_Page/User_Registration.dart와 연동이 되어 있으며
-협업을 할 사람은 디자인한 것에 맞춰 User_Registration.dart에서 코드를 짜주시면 됩니다.
+터미널을 켠 뒤
+
+1. git init
+2. git add .
+3. git commit -m "FEAT 안에 있는 TASK 내용"
+
+* 예시: git commit -m "TASK : User Choice Page Design"
+* 지금 서술한 User Choice Page Design은 Epic: UI에 있는 #2 FEAT : User Choice Page Layout 안에 있는 TASK : User Choice Page Design을 말하는 것입니다.
+* 요약하면 TASK 제목으로 커밋 메시지를 넣으면 됩니다.
+
+## 3. 브랜치 병합
+
+1. 먼저 메인 브랜치로 돌아가야 합니다.
+1-1. git checkout main
+
+2. 그리고 브랜치를 병합합니다.
+2-1. git merge feature/User-Choice-Page-Layout
+
+## 4. 브랜치 삭제 (필요한 경우에만)
+
+작업이 끝나고 병합된 브랜치를 삭제할 수도 있습니다.
+
+git branch -d feature/User-Choice-Page-Layout
 
 # 주의사항
 
-assets 폴더는 각종 이미지나 svg 애니메이션 json 파일을 넣어두는 곳으로 임의로 "삭제", "이동"을 하지 말아주시길 바랍니다.
-페이지를 만들다가 필요하다면 언제든 assets에 "추가"하는 건 가능합니다.
-
-android/build.gradle과 android/app/build.gradle은 이미 건드려 놓은 상태이니 건들어야 하는 상황이 온다면
-꼭 팀원에게 말해주시길 바랍니다.
-
-평소에 빌드를 할 때는 debug 모드로 빌드를 하되
-테스트 결과를 보고 싶다면 터미널에 flutter run --release를 써주세요.
-
-그리고 빌드할 때 코틀린 버전과 관련된 오류가 뜰 겁니다. 앱을 빌드할 때 지장이 가지 않는 오류이니
-무시해주시길 바랍니다.
-
-코드는 300줄 이상이 넘어가면 가독성이 굉장히 떨어집니다.
-되도록이면 200줄 내외로 코드를 작성해주시고 너무 길어진다면 파일을 쪼개서 import하는 방식을 추천드립니다.
-
-앱은 상태 관리가 굉장히 중요하기 때문에 pubspec.yaml에 있는 provider를 꼭 잘 활용해 주시길 바랍니다.
-
-# PR 규칙
-
-제목: 이름 / 날짜
-
-ex) 최지온 / 2024.07.14
-
-내용: 수정사항 정리해서 쓰기
-
-ex)
-
-~~를 수정했습니다.
-
-~~의 버그를 고쳤습니다.
-
-~~를 추가했습니다.
+1. 만약 TASK, 즉 할 일이 끝났다면 TASK만 Close 해주시길 바랍니다.
+2. FEAT, EPIC은 모든 작업이 끝난 후 교차 검증을 한 뒤 Close 할 겁니다.
+3. EPIC, FEAT, TASK를 헷갈리지 않게 꼭 꼼꼼히 확인하고 브랜치를 만들어주시길 바랍니다.
+4. 필요하다면 언제든 EPIC, FEAT, TASK를 만들어도 되지만 꼭 팀원에게 말해주시길 바랍니다.
+5. 후일 SERVER와 연동을 해야 할 때 EPIC : SERVER 이슈를 만들 것이니 아직은 만들지 말아주시길 바랍니다.
