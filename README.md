@@ -21,13 +21,13 @@
 
 터미널에서
 
-git checkout -b feature/feature 이름
+git checkout -b FEAT/FEAT 번호
 
 이런 식으로 작성해서 브랜치를 만들면 됩니다.
 
-* 예시: git checkout -b feature/User-Choice-Page-Layout
-* 지금 서술한 User-Choice-Page-Layout은 EPIC : UI에 있는 #2 FEAT : User Choice Page Layout을 말하는 것입니다.
-* 요약하면 FEATURE 제목으로 브랜치를 파면 됩니다.
+* 예시: git checkout -b FEAT/#2
+* 지금 서술한 FEAT/#2는 EPIC : UI에 있는 #2 FEAT : User Choice Page Layout을 말하는 것입니다.
+* 요약하면 FEAT 번호로 브랜치를 만들면 됩니다.
 
 ## 2. 작업하고 커밋하기
 
@@ -37,11 +37,11 @@ git checkout -b feature/feature 이름
 
 1. git init
 2. git add .
-3. git commit -m "FEAT 안에 있는 TASK 내용"
+3. git commit -m "TASK #번호 : 내용 간단 요약"
 
-* 예시: git commit -m "TASK : User Choice Page Design"
-* 지금 서술한 User Choice Page Design은 Epic: UI에 있는 #2 FEAT : User Choice Page Layout 안에 있는 TASK : User Choice Page Design을 말하는 것입니다.
-* 요약하면 TASK 제목으로 커밋 메시지를 넣으면 됩니다.
+* 예시: git commit -m "TASK #3 : ~~페이지 디자인을 했습니다."
+* 지금 서술한 TASK #3는 Epic: UI에 있는 #2 FEAT : User Choice Page Layout 안에 있는 TASK : User Choice Page Design을 말하는 것입니다.
+* 요약하면 "TASK #번호 : 내용" 으로 커밋메시지를 적어주시면 됩니다.
 
 ## 3. 브랜치 병합
 
@@ -49,13 +49,16 @@ git checkout -b feature/feature 이름
 1-1. git checkout main
 
 2. 그리고 브랜치를 병합합니다.
-2-1. git merge feature/User-Choice-Page-Layout
+2-1. git merge 아까 만든 브랜치 이름
+2-2. 예시: git merge FEAT/#2
 
 ## 4. 브랜치 삭제 (필요한 경우에만)
 
 작업이 끝나고 병합된 브랜치를 삭제할 수도 있습니다.
 
-git branch -d feature/User-Choice-Page-Layout
+git branch -d 아까 만든 브랜치 이름
+
+예시: git branch -d FEAT/#2
 
 # 주의사항
 
