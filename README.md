@@ -52,6 +52,8 @@ git checkout -b FEAT/FEAT 번호
 2-1. git merge 아까 만든 브랜치 이름
 2-2. 예시: git merge FEAT/#2
 
+물론 fork를 해서 자신의 레포지토리에서 수정을 하는 경우 PR (Pull Request)를 올리면 됩니다.
+
 ## 4. 브랜치 삭제 (필요한 경우에만)
 
 작업이 끝나고 병합된 브랜치를 삭제할 수도 있습니다.
