@@ -49,7 +49,7 @@ git checkout -b FEAT/FEAT 번호
 1-1. git checkout main
 
 2. 그리고 브랜치를 병합합니다.
-3. 
+
 2-1. git merge 아까 만든 브랜치 이름
    
 2-2. 예시: git merge FEAT/#2
