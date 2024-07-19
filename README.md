@@ -8,8 +8,8 @@
 
 ## 주의사항
 
-1. EPIC은 이슈로만 올립니다.
-2. branch는 FEAT 단위로 합니다.
+1. EPIC은 Issues로만 올립니다.
+2. Branch는 FEAT 단위로 합니다.
 3. Commit은 TASK 단위로 합니다.
 
 이제 git bash를 사용하는 방법을 알려드리겠습니다.
@@ -21,7 +21,7 @@
 
 터미널에서
 
-git checkout -b FEAT/FEAT 번호
+git checkout -b FEAT/FEAT번호
 
 이런 식으로 작성해서 브랜치를 만들면 됩니다.
 
@@ -40,6 +40,7 @@ git checkout -b FEAT/FEAT 번호
 3. git commit -m "TASK #번호 : 내용 간단 요약"
 
 * 예시: git commit -m "TASK #3 : ~~페이지 디자인을 했습니다."
+* 커밋 메시지는 "~~를 했습니다.", "~~를 수정했습니다." 등등 내용을 이해할 수 있다면 어떤 식으로 쓰든 상관 없습니다.
 * 지금 서술한 TASK #3는 Epic: UI에 있는 #2 FEAT : User Choice Page Layout 안에 있는 TASK : User Choice Page Design을 말하는 것입니다.
 * 요약하면 "TASK #번호 : 내용" 으로 커밋메시지를 적어주시면 됩니다.
 
