@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Camera_Page/Camera_Page.dart';
+import '../Profile_Page/Main_Profile.dart'; // MainProfilePage 파일 임포트
 
 class SignUpProvider with ChangeNotifier {
   String _username = '';
@@ -36,11 +36,11 @@ class SignUpProvider with ChangeNotifier {
     }
   }
 
-  void navigateToCameraPage(BuildContext context) {
+  void navigateToMainProfilePage(BuildContext context) {
     if (_password == _confirmPassword) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const CameraPage()),
+        MaterialPageRoute(builder: (context) => const MainProfilePage()),
       );
     } else {
       validatePasswords();
