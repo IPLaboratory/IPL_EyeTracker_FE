@@ -97,7 +97,7 @@ class SignUpPageContent extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      signUpProvider.navigateToCameraPage(context);
+                      signUpProvider.navigateToMainProfilePage(context);
                     },
                     child: const Text(
                       '삶의 질을 높이러 가기',

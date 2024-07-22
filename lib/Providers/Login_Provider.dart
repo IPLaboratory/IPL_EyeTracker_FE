@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:real_test/Profile_Page/Main_Profile.dart';
 import '../User_Registration_Page/User_Registration.dart';
 import '../Sign_Up_Page/Sign_Up_Page.dart';
 
@@ -23,7 +24,7 @@ class LoginProvider with ChangeNotifier {
     // 로그인 로직을 여기에 추가하세요.
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const UserRegistrationPage()),
+      MaterialPageRoute(builder: (context) => const MainProfilePage()),
     );
   }
 

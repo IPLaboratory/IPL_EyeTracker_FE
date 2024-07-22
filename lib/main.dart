@@ -34,7 +34,9 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const SplashScreen(), // 스플래시 화면 경로 설정
         '/': (context) => const HomeScreen(),
         '/signup': (context) => const SignUpPage(),
-        '/camera': (context) => const CameraPage(),
+        '/camera': (context) => CameraPage(onProfileAdded: () {
+          // 프로필 추가 로직
+        }),
         '/user_registration': (context) => const UserRegistrationPage(),
       },
     );

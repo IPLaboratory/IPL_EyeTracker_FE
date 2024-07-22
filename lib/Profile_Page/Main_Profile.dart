@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // SVG 파일 사용을 위한 패키지
+import '../Camera_Page/Camera_Page.dart';  // CameraPage 파일 임포트
 
 class MainProfilePage extends StatefulWidget {
   const MainProfilePage({super.key});
@@ -8,10 +9,17 @@ class MainProfilePage extends StatefulWidget {
   _MainProfilePageState createState() => _MainProfilePageState();
 }
 
-class _MainProfilePageState extends State<MainProfilePage>{
+class _MainProfilePageState extends State<MainProfilePage> {
   bool _isImageVisible = true;
   bool _isChange = false;
   int chk = 0;
+
+  void addProfile() {
+    setState(() {
+      _isImageVisible = false;
+      chk += 1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +37,7 @@ class _MainProfilePageState extends State<MainProfilePage>{
               // color 속성을 사용하지 않음, 기본 색상 유지
             ),
             onPressed: () {
-              setState((){
-                print('11');
+              setState(() {
                 _isChange = true;
               });
             },
@@ -56,7 +63,7 @@ class _MainProfilePageState extends State<MainProfilePage>{
               color: Colors.black,
             ),
             //이미지 표시 여부에 따라 이미지 위젯을 조건부 렌더링
-            if(_isImageVisible)
+            if (_isImageVisible)
               Transform.translate(
                 offset: const Offset(0, 57), // 텍스트 아래로 이동
                 child: SizedBox(
@@ -68,9 +75,8 @@ class _MainProfilePageState extends State<MainProfilePage>{
                   ),
                 ),
               ),
-            if(_isImageVisible==false)
+            if (!_isImageVisible)
               Container(
-                /*color: Colors.blue,*/
                 width: double.infinity,
                 height: 300,
                 margin: const EdgeInsets.fromLTRB(70, 30, 70, 0),
@@ -79,11 +85,10 @@ class _MainProfilePageState extends State<MainProfilePage>{
                   runSpacing: 40.0, // 자식 요소 간의 수직 간격
                   children: <Widget>[
                     //프로필 추가시 프로필과 프로필명 출력 부분
-                    for(int i=0; i<chk; i++)
+                    for (int i = 0; i < chk; i++)
                       Container(
                         width: 150,
                         height: 170,
-                        /*color: Colors.yellow,*/
                         child: Column(
                           children: <Widget>[
                             Container(
@@ -92,25 +97,24 @@ class _MainProfilePageState extends State<MainProfilePage>{
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.0),
                                 image: DecorationImage(
-                                  image: AssetImage('assets/character${i+1}.jpg'),
+                                  image: AssetImage('assets/character${i + 1}.jpg'),
                                   fit: BoxFit.cover,
                                 ),
                               ),
                               child: _isChange
-                                ?IconButton(
+                                  ? IconButton(
                                 onPressed: () {
                                   // 버튼 기능 추가 예정
                                 },
-                                icon: Icon(Icons.edit,size: 30,),
+                                icon: Icon(Icons.edit, size: 30),
                                 color: Colors.white,
                               )
-                              : Container(), // _isChange가 false일 때 빈 컨테이너를 표시
+                                  : Container(), // _isChange가 false일 때 빈 컨테이너를 표시
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text("캐릭터${i+1}",
-                                    textAlign: TextAlign.center)
+                                Text("캐릭터${i + 1}", textAlign: TextAlign.center)
                               ],
                             ),
                           ],
@@ -132,12 +136,13 @@ class _MainProfilePageState extends State<MainProfilePage>{
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
-                  onPressed: () {
-                    // 프로필 추가 기능 추가 예정
-                    setState((){
-                      _isImageVisible = false;
-                      chk += 1;
-                    });
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CameraPage(onProfileAdded: addProfile),
+                      ),
+                    );
                   },
                   child: const Text(
                     '프로필 추가하기',
