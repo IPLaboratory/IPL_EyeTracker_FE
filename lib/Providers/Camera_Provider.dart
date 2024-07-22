@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
-import '../User_Registration_Page/User_Registration.dart'; // 경로는 실제 경로에 맞게 조정하세요
 
 class CameraProvider with ChangeNotifier {
   String? _videoPath;
@@ -39,10 +38,7 @@ class CameraProvider with ChangeNotifier {
   }
 
   void proceedWithCurrentVideo(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const UserRegistrationPage()),
-    );
+    Navigator.pop(context);
   }
 
   void disposeVideoPlayer() {

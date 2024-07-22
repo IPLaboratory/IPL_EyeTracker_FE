@@ -6,19 +6,23 @@ import 'dart:math' as math;
 import '../providers/camera_provider.dart';
 
 class CameraPage extends StatelessWidget {
-  const CameraPage({super.key});
+  final VoidCallback onProfileAdded;
+
+  const CameraPage({super.key, required this.onProfileAdded});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => CameraProvider(),
-      child: const CameraPageContent(),
+      child: CameraPageContent(onProfileAdded: onProfileAdded),
     );
   }
 }
 
 class CameraPageContent extends StatelessWidget {
-  const CameraPageContent({super.key});
+  final VoidCallback onProfileAdded;
+
+  const CameraPageContent({super.key, required this.onProfileAdded});
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +167,10 @@ class CameraPageContent extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                         ),
-                        onPressed: () => cameraProvider.proceedWithCurrentVideo(context),
+                        onPressed: () {
+                          cameraProvider.proceedWithCurrentVideo(context);
+                          onProfileAdded();
+                        },
                         child: const Text(
                           '현재 동영상으로 진행',
                           style: TextStyle(

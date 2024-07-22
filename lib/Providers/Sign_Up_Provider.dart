@@ -40,7 +40,9 @@ class SignUpProvider with ChangeNotifier {
     if (_password == _confirmPassword) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const CameraPage()),
+        MaterialPageRoute(builder: (context) => CameraPage(onProfileAdded: () {
+          // 프로필 추가 로직
+        })),
       );
     } else {
       validatePasswords();
