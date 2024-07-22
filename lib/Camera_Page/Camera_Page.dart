@@ -168,8 +168,8 @@ class CameraPageContent extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          cameraProvider.proceedWithCurrentVideo(context);
                           onProfileAdded();
+                          Navigator.pop(context, true);  // true 값을 반환하며 페이지를 닫음
                         },
                         child: const Text(
                           '현재 동영상으로 진행',

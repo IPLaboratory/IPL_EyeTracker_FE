@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/sign_up_provider.dart';
-import '../dismiss_keyboard.dart';
+import '../Providers/Sign_Up_Provider.dart';
+import '../Dismiss_Keyboard.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
@@ -48,7 +48,7 @@ class SignUpPageContent extends StatelessWidget {
                 const SizedBox(height: 24),
                 Image.asset(
                   'assets/Sign_Up_Page.png',
-                  height: 215, // 필요에 따라 높이 조정
+                  height: 215, // Adjust the height as needed
                 ),
                 const SizedBox(height: 24),
                 TextField(
@@ -97,7 +97,7 @@ class SignUpPageContent extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      signUpProvider.navigateToMainProfilePage(context); // 메서드 호출 변경
+                      signUpProvider.navigateToMainProfilePage(context);
                     },
                     child: const Text(
                       '삶의 질을 높이러 가기',

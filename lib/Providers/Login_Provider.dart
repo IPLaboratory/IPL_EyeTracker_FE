@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Profile_Page/Main_Profile.dart'; // Main_Profile 페이지를 import
+import 'package:real_test/Profile_Page/Main_Profile.dart';
+import '../User_Registration_Page/User_Registration.dart';
 import '../Sign_Up_Page/Sign_Up_Page.dart';
 
 class LoginProvider with ChangeNotifier {
