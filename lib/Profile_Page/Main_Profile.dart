@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // SVG 파일 사용을 위한 패키지
 import '../Camera_Page/Camera_Page.dart';  // CameraPage 파일 임포트
+import '../User_Registration_Page/User_Registration.dart'; // UserRegistrationPage 파일 임포트
 
 class MainProfilePage extends StatefulWidget {
   const MainProfilePage({super.key});
@@ -19,6 +20,13 @@ class _MainProfilePageState extends State<MainProfilePage> {
       _isImageVisible = false;
       chk += 1;
     });
+  }
+
+  void navigateToUserRegistrationPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const UserRegistrationPage()),
+    );
   }
 
   @override
@@ -50,14 +58,14 @@ class _MainProfilePageState extends State<MainProfilePage> {
           mainAxisAlignment: MainAxisAlignment.start, // 텍스트를 위쪽에 배치
           children: [
             const SizedBox(height: 5), // 원하는 높이로 조절 가능
-            AdjustableText(
+            const AdjustableText(
               text: 'E.T.',
               fontSize: 50,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
             const SizedBox(height: 14),
-            AdjustableText(
+            const AdjustableText(
               text: '아이트랙킹할 프로필을 추가해주세요.',
               fontSize: 20,
               color: Colors.black,
@@ -78,26 +86,25 @@ class _MainProfilePageState extends State<MainProfilePage> {
             if (!_isImageVisible)
               Container(
                 width: double.infinity,
-                height: 300,
-                margin: const EdgeInsets.fromLTRB(70, 30, 70, 0),
+                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: Wrap(
-                  spacing: 50, // 자식 요소 간의 수평 간격
-                  runSpacing: 40.0, // 자식 요소 간의 수직 간격
-                  children: <Widget>[
-                    //프로필 추가시 프로필과 프로필명 출력 부분
-                    for (int i = 0; i < chk; i++)
-                      Container(
+                  spacing: 20.0, // 자식 요소 간의 수평 간격
+                  runSpacing: 20.0, // 자식 요소 간의 수직 간격
+                  children: List.generate(chk, (index) {
+                    return GestureDetector(
+                      onTap: () => navigateToUserRegistrationPage(context),
+                      child: Container(
                         width: 150,
                         height: 170,
                         child: Column(
                           children: <Widget>[
                             Container(
-                              width: 150,
-                              height: 149,
+                              width: 130,
+                              height: 129,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.0),
                                 image: DecorationImage(
-                                  image: AssetImage('assets/character${i + 1}.jpg'),
+                                  image: AssetImage('assets/character${index + 1}.jpg'),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -106,7 +113,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                 onPressed: () {
                                   // 버튼 기능 추가 예정
                                 },
-                                icon: Icon(Icons.edit, size: 30),
+                                icon: const Icon(Icons.edit, size: 30),
                                 color: Colors.white,
                               )
                                   : Container(), // _isChange가 false일 때 빈 컨테이너를 표시
@@ -114,13 +121,14 @@ class _MainProfilePageState extends State<MainProfilePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text("캐릭터${i + 1}", textAlign: TextAlign.center)
+                                Text("캐릭터${index + 1}", textAlign: TextAlign.center)
                               ],
                             ),
                           ],
                         ),
                       ),
-                  ],
+                    );
+                  }),
                 ),
               ),
             const Spacer(), // 빈 공간을 채워 버튼을 아래로 배치
