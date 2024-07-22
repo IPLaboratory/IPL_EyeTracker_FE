@@ -44,18 +44,17 @@ git checkout -b FEAT/FEAT번호
 * 지금 서술한 TASK #3는 Epic: UI에 있는 #2 FEAT : User Choice Page Layout 안에 있는 TASK : User Choice Page Design을 말하는 것입니다.
 * 요약하면 "TASK #번호 : 내용" 으로 커밋메시지를 적어주시면 됩니다.
 
-## 3. 브랜치 병합
+## 3. 푸쉬하고 PR 올리기
 
-1. 먼저 메인 브랜치로 돌아가야 합니다.
-1-1. git checkout main
+1. git push -u origin FEAT/#번호
 
-2. 그리고 브랜치를 병합합니다.
+2. 예시:ㅣ git push -u origin FEAT/#2
 
-2-1. git merge 아까 만든 브랜치 이름
-   
-2-2. 예시: git merge FEAT/#2
+우리는 fork를 해서 올리기 때문에 IPL_EyeTracker_FE에 PR을 올려야 합니다.
 
-물론 fork를 해서 자신의 레포지토리에서 수정을 하는 경우 PR (Pull Request)를 올리면 됩니다.
+Merge가 필요하다면 꼭 팀원에게 말해주세요.
+
+PR을 하나 올렸다면 또 올리지 말아주세요.
 
 ## 4. 브랜치 삭제 (필요한 경우에만)
 
@@ -64,6 +63,10 @@ git checkout -b FEAT/FEAT번호
 git branch -d 아까 만든 브랜치 이름
 
 예시: git branch -d FEAT/#2
+
+강제로 지우고 싶다면 git branch -D 아까 만든 브랜치 이름을 하시면 됩니다.
+
+예시: git branch -D FEAT/#2
 
 # 주의사항
 
