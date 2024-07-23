@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import 'package:real_test/Profile_Page/Main_Profile.dart';
+
 
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
@@ -43,6 +45,19 @@ class _ChangeProfilePageState extends State<ChangeProfilePage>{
           child: Column(
             //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              const SizedBox(height: 5),
+              const AdjustableText(
+                  text: 'E.T',
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+              color: Colors.black,
+              ),
+              const SizedBox(height: 14),
+              const AdjustableText(
+                text: '자유롭게 프로필을 수정하세요.',
+                fontSize: 20,
+                color: Colors.black,
+              ),
               const SizedBox(height: 60),
               Stack(
                 children: [
@@ -88,7 +103,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage>{
               ),
               const SizedBox(height: 10),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 100.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 60.0),
                   child: Column(
                     children: [
                       TextField(
@@ -96,13 +111,71 @@ class _ChangeProfilePageState extends State<ChangeProfilePage>{
                           border: OutlineInputBorder(),
                           labelText: '캐릭터1',
                         ),
-                      )
+                      ),
                     ],
                   )
-              )
+              ),
+              const Spacer(),// 빈 공간을 채워 버튼을 아래로 배치
+              Padding(
+                padding: const EdgeInsets.all(16.0),// 버튼 주위에 여백 추가
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFCAF4FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                        ),
+                        onPressed: () {
+                        },
+                        child: const Text(
+                          '저장',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         )
+    );
+  }
+}
+
+class AdjustableText extends StatelessWidget {
+  final String text;
+  final double fontSize;
+  final FontWeight? fontWeight;
+  final Color color;
+
+  const AdjustableText({
+    required this.text,
+    required this.fontSize,
+    this.fontWeight,
+    required this.color,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: fontWeight ?? FontWeight.normal,
+        color: color,
+      ),
     );
   }
 }
