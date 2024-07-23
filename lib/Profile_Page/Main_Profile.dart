@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // SVG 파일 사용을 위한 패키지
 import '../Camera_Page/Camera_Page.dart';  // CameraPage 파일 임포트
 import '../User_Registration_Page/User_Registration.dart'; // UserRegistrationPage 파일 임포트
+import 'Change_Profile.dart';
 
 class MainProfilePage extends StatefulWidget {
   const MainProfilePage({super.key});
@@ -112,6 +113,10 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                   ? IconButton(
                                 onPressed: () {
                                   // 버튼 기능 추가 예정
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const ChangeProfilePage()),
+                                  );
                                 },
                                 icon: const Icon(Icons.edit, size: 30),
                                 color: Colors.white,
