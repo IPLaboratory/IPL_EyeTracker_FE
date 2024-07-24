@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:real_test/Feature_Settings_Page/Main_Settings.dart';
 
 class MachineRecognitionPage extends StatelessWidget {
   const MachineRecognitionPage({super.key});
@@ -83,7 +85,10 @@ class MachineRecognitionPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // 기기 등록 기능 추가 예정
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainSettingsPage()),
+                  );
                 },
                 child: const Text(
                   '기기 등록',
