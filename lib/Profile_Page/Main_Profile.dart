@@ -3,8 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart'; // SVG 파일 사용을 위한 �
 import '../Camera_Page/Camera_Page.dart';  // CameraPage 파일 임포트
 import '../User_Registration_Page/User_Registration.dart'; // UserRegistrationPage 파일 임포트
 import 'Change_Profile.dart'; //Change_ProfilePage 파일 임포트
-import '../Device_Select_Page/Main_Device.dart'; //Main_Device파일 임포트
-
 
 class MainProfilePage extends StatefulWidget {
   const MainProfilePage({super.key});
@@ -161,37 +159,6 @@ class _MainProfilePageState extends State<MainProfilePage> {
                   },
                   child: const Text(
                     '프로필 추가하기',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0), // 버튼 주위에 여백 추가
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF48859E),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    //profileProvider.profile(context);
-                    //ChangeProfilePage();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const MainDevicePage()),
-                    );
-                  },
-                  child: const Text(
-                    '기기 선택',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
