@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/splash', // 앱이 처음 시작할 때 스플래시 화면으로 이동
       routes: {
         '/splash': (context) => const SplashScreen(), // 스플래시 화면 경로 설정
-        '/': (context) => const HomeScreen(),
+        '/home': (context) => const HomeScreen(),
         '/signup': (context) => const SignUpPage(),
         '/camera': (context) => CameraPage(onProfileAdded: () {
           // 프로필 추가 로직
