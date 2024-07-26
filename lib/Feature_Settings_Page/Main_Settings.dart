@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../Controllers/Feature/Main_Settings_Controller.dart';
 import 'Help_Icon.dart';
 import 'Gesture_Choice.dart'; // GestureChoice 위젯 임포트
 import 'Notification.dart'; // Notification 파일 임포트
-import 'package:real_test/Device_Select_Page/Main_Device.dart';
 
 class MainSettingsPage extends StatelessWidget {
+  final MainSettingsController controller = Get.put(MainSettingsController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +45,7 @@ class MainSettingsPage extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
+                    onChanged: (value) => controller.setFunctionName(value),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: '기능명을 입력하세요',
@@ -61,7 +65,7 @@ class MainSettingsPage extends StatelessWidget {
                 const SizedBox(width: 10),
                 GestureDetector(
                   onTap: () {
-                    showHelpSnackbar(context); // 스낵바 호출 함수
+                    showHelpSnackbar(context); // showHelpSnackbar 호출
                   },
                   child: Image.asset(
                     'assets/Main_Settings_Question.png', // 이미지 경로
@@ -72,18 +76,24 @@ class MainSettingsPage extends StatelessWidget {
                 const SizedBox(width: 10),
                 SizedBox(
                   width: 99, // 버튼 너비 설정
-                  child: ElevatedButton(
+                  child: Obx(() => ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFCAF4FF),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4.0),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: controller.isRegistering.value ? null : () {
+                      controller.startRegistering();
                       showRegistrationInProgress(context);
-                      // 여기서 주파수 등록 로직 추가
-                      // 등록 완료 시 아래 함수 호출
-                      // showRegistrationComplete(context);
+                      Future.delayed(Duration(seconds: 2), () {
+                        controller.stopRegistering();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('주파수가 연결되었습니다.'),
+                          ),
+                        );
+                      });
                     },
                     child: const Text(
                       '연결하기',
@@ -93,7 +103,7 @@ class MainSettingsPage extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                  ),
+                  )),
                 ),
                 const SizedBox(width: 10),
                 SizedBox(
@@ -106,7 +116,11 @@ class MainSettingsPage extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      // 저장하기 버튼 기능 추가
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('설정이 저장되었습니다.'),
+                        ),
+                      );
                     },
                     child: const Text(
                       '저장하기',
@@ -144,10 +158,7 @@ class MainSettingsPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MainDevicePage()),
-                  );
+                  Get.toNamed('/mainDevice');
                 },
                 child: const Text(
                   '기기 선택하러 가기',
