@@ -6,6 +6,7 @@ import 'Camera_Page/Camera_Page.dart';
 import 'User_Registration_Page/User_Registration.dart';
 import 'Fake_Splash.dart';
 import 'Profile_Page/Main_Profile.dart'; // MainProfilePage 임포트
+import 'Device_Select_Page/Main_Device.dart'; // MainDevicePage 임포트
 
 void main() {
   runApp(MyApp());
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         })),
         GetPage(name: '/user_registration', page: () => const UserRegistrationPage()),
         GetPage(name: '/mainProfile', page: () => const MainProfilePage()), // MainProfilePage 경로 추가
+        GetPage(name: '/mainDevice', page: () => const MainDevicePage()), // MainDevicePage 경로 추가
       ],
     );
   }
