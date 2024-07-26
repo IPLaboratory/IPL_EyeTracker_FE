@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         })),
         GetPage(name: '/user_registration', page: () => const UserRegistrationPage()),
         GetPage(name: '/mainProfile', page: () => const MainProfilePage()), // MainProfilePage 경로 추가
-        GetPage(name: '/mainDevice', page: () => const MainDevicePage()), // MainDevicePage 경로 추가
+        GetPage(name: '/mainDevice', page: () => MainDevicePage()), // MainDevicePage 경로 추가
       ],
     );
   }
