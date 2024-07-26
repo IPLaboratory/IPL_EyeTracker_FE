@@ -1,44 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'providers/login_provider.dart';
-import 'providers/sign_up_provider.dart';
-import 'providers/camera_provider.dart';
-import 'Main_Page/Main_Page.dart';
+import 'package:get/get.dart';
+import 'Main_Page/Main_Page.dart'; // HomeScreen이 정의된 파일
 import 'Sign_Up_Page/Sign_Up_Page.dart';
 import 'Camera_Page/Camera_Page.dart';
 import 'User_Registration_Page/User_Registration.dart';
 import 'Fake_Splash.dart';
+import 'Profile_Page/Main_Profile.dart'; // MainProfilePage 임포트
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => LoginProvider()),
-        ChangeNotifierProvider(create: (_) => SignUpProvider()),
-        ChangeNotifierProvider(create: (_) => CameraProvider()),
-      ],
-      child: MyApp(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: ThemeData(
         fontFamily: 'Maple', // 전역 폰트 설정
       ),
       initialRoute: '/splash', // 앱이 처음 시작할 때 스플래시 화면으로 이동
-      routes: {
-        '/splash': (context) => const SplashScreen(), // 스플래시 화면 경로 설정
-        '/home': (context) => const HomeScreen(),
-        '/signup': (context) => const SignUpPage(),
-        '/camera': (context) => CameraPage(onProfileAdded: () {
+      getPages: [
+        GetPage(name: '/splash', page: () => const SplashScreen()),
+        GetPage(name: '/home', page: () => const HomeScreen()), // HomeScreen 경로 설정
+        GetPage(name: '/signup', page: () => const SignUpPage()),
+        GetPage(name: '/camera', page: () => CameraPage(onProfileAdded: () {
           // 프로필 추가 로직
-        }),
-        '/user_registration': (context) => const UserRegistrationPage(),
-      },
+        })),
+        GetPage(name: '/user_registration', page: () => const UserRegistrationPage()),
+        GetPage(name: '/mainProfile', page: () => const MainProfilePage()), // MainProfilePage 경로 추가
+      ],
     );
   }
 }

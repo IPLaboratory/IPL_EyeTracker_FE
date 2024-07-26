@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import '../dismiss_keyboard.dart';
-import '../providers/login_provider.dart';
+import '../Controllers/Login_Controller.dart'; // LoginController 임포트
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context);
+    final LoginController loginController = Get.put(LoginController());
     final usernameFocusNode = FocusNode();
     final passwordFocusNode = FocusNode();
 
@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           TextField(
                             focusNode: usernameFocusNode,
-                            onChanged: (value) => loginProvider.setUsername(value),
+                            onChanged: (value) => loginController.setUsername(value),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: '로그인',
@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(height: 17),
                           TextField(
                             focusNode: passwordFocusNode,
-                            onChanged: (value) => loginProvider.setPassword(value),
+                            onChanged: (value) => loginController.setPassword(value),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: '비밀번호',
@@ -101,7 +101,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                               onPressed: () {
                                 _unfocusAll();
-                                loginProvider.login(context);
+                                loginController.login();
                               },
                               child: const Text(
                                 '로그인',
@@ -124,7 +124,7 @@ class HomeScreen extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               _unfocusAll();
-                              loginProvider.navigateToSignUp(context);
+                              loginController.navigateToSignUp();
                             },
                             child: const Text(
                               '지금 가입하세요.',

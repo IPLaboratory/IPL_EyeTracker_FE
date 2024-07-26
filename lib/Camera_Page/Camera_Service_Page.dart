@@ -3,8 +3,8 @@ import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart' show join;
-import 'package:provider/provider.dart';
-import '../Providers/Camera_Provider.dart';
+import 'package:get/get.dart';
+import '../Controllers/Camera_Controller.dart'; // GetX CameraControllerX
 import 'Camera_Overlay.dart';
 
 class CameraServicePage extends StatefulWidget {
@@ -13,7 +13,7 @@ class CameraServicePage extends StatefulWidget {
 }
 
 class _CameraServicePageState extends State<CameraServicePage> {
-  late CameraController _controller;
+  late CameraController _cameraController; // camera 패키지의 CameraController
   Future<void>? _initializeControllerFuture;
   bool _isRecording = false;
 
@@ -29,26 +29,26 @@ class _CameraServicePageState extends State<CameraServicePage> {
           (camera) => camera.lensDirection == CameraLensDirection.front,
     );
 
-    _controller = CameraController(
+    _cameraController = CameraController(
       frontCamera,
       ResolutionPreset.high,
       enableAudio: true,
     );
 
-    _initializeControllerFuture = _controller.initialize();
+    _initializeControllerFuture = _cameraController.initialize();
     if (mounted) {
       setState(() {});
     }
   }
 
   Future<void> _startVideoRecording() async {
-    if (_controller.value.isRecordingVideo) {
+    if (_cameraController.value.isRecordingVideo) {
       return;
     }
 
     try {
       await _initializeControllerFuture;
-      await _controller.startVideoRecording();
+      await _cameraController.startVideoRecording();
       setState(() {
         _isRecording = true;
       });
@@ -58,12 +58,12 @@ class _CameraServicePageState extends State<CameraServicePage> {
   }
 
   Future<void> _stopVideoRecording(BuildContext context) async {
-    if (!_controller.value.isRecordingVideo) {
+    if (!_cameraController.value.isRecordingVideo) {
       return;
     }
 
     try {
-      final XFile videoFile = await _controller.stopVideoRecording();
+      final XFile videoFile = await _cameraController.stopVideoRecording();
       setState(() {
         _isRecording = false;
       });
@@ -76,10 +76,11 @@ class _CameraServicePageState extends State<CameraServicePage> {
 
       await videoFile.saveTo(filePath);
 
-      Provider.of<CameraProvider>(context, listen: false)
-          .stopRecording(filePath);
+      // Use GetX to update the camera controller
+      final CameraControllerX cameraControllerX = Get.find();
+      cameraControllerX.stopRecording(filePath);
 
-      Navigator.pop(context, filePath);
+      Get.back(result: filePath);
     } catch (e) {
       print(e);
     }
@@ -87,37 +88,34 @@ class _CameraServicePageState extends State<CameraServicePage> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _cameraController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => CameraProvider(),
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: _initializeControllerFuture == null
-            ? Center(child: CircularProgressIndicator())
-            : FutureBuilder<void>(
-          future: _initializeControllerFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Stack(
-                children: [
-                  CameraPreview(_controller),
-                  CameraOverlay(
-                    onStartRecording: _startVideoRecording,
-                    onStopRecording: () => _stopVideoRecording(context),
-                    isRecording: _isRecording,
-                  ),
-                ],
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: _initializeControllerFuture == null
+          ? Center(child: CircularProgressIndicator())
+          : FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Stack(
+              children: [
+                CameraPreview(_cameraController),
+                CameraOverlay(
+                  onStartRecording: _startVideoRecording,
+                  onStopRecording: () => _stopVideoRecording(context),
+                  isRecording: _isRecording,
+                ),
+              ],
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
