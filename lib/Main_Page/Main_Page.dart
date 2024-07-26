@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../dismiss_keyboard.dart';
-import '../Controllers/Login_Controller.dart'; // LoginController 임포트
+import '../Controllers/Login/Login_Controller.dart'; // LoginController 임포트
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
