@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../Controllers/Device/Main_Device_Controller.dart';
 
-class MainDevicePage extends StatefulWidget {
-  const MainDevicePage({super.key});
-
+class MainDevicePage extends StatelessWidget {
+  final MainDeviceController controller = Get.put(MainDeviceController());
 
   @override
-  _MainDevicePageState createState() => _MainDevicePageState();
-}
-
-class _MainDevicePageState extends State<MainDevicePage>{
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF9D0),
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFF9D0),
-        //backgroundColor: const Color(0xFFFFd9D0),// 배경색 설정
-        elevation: 0, // 그림자 제거
+        elevation: 0,
         actions: [
-          const SizedBox(width: 10), // 약간의 간격 추가
+          const SizedBox(width: 10),
         ],
       ),
-      body:Center(
+      body: Center(
         child: Column(
           children: [
             const Text(
@@ -55,7 +51,7 @@ class _MainDevicePageState extends State<MainDevicePage>{
             ),
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.all(16.0), // 버튼 주위에 여백 추가
+              padding: const EdgeInsets.all(16.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -67,7 +63,7 @@ class _MainDevicePageState extends State<MainDevicePage>{
                     ),
                   ),
                   onPressed: () {
-                    //눌렀을때 동장
+                    controller.stopEyeTracking();
                   },
                   child: const Text(
                     '아이트래킹 종료하기',
