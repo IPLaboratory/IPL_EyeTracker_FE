@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../Controllers/Sign_Up_Controller.dart';
+import '../Controllers/SignUp/Sign_Up_Controller.dart';
 import '../Dismiss_Keyboard.dart';
 
 class SignUpPage extends StatelessWidget {

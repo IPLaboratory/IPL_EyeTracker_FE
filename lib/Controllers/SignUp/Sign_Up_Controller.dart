@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../Profile_Page/Main_Profile.dart'; // MainProfilePage 파일 임포트
+import '../../Profile_Page/Main_Profile.dart'; // MainProfilePage 파일 임포트
 
 class SignUpController extends GetxController {
   var username = ''.obs;

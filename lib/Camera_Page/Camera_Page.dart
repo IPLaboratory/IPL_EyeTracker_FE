@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'camera_service_page.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:math' as math;
-import '../Controllers/Camera_Controller.dart'; // GetX CameraControllerX
+import '../Controllers/Camera/camera_page_controller.dart';
 
 class CameraPage extends StatelessWidget {
   final VoidCallback onProfileAdded;
@@ -12,8 +12,8 @@ class CameraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CameraControllerX>(
-      init: CameraControllerX(),
+    return GetBuilder<CameraPageController>(
+      init: CameraPageController(),
       builder: (cameraController) {
         return CameraPageContent(onProfileAdded: onProfileAdded);
       },
@@ -28,7 +28,7 @@ class CameraPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CameraControllerX cameraController = Get.find();
+    final CameraPageController cameraController = Get.find();
 
     return WillPopScope(
       onWillPop: () async {
