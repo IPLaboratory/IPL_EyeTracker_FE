@@ -73,7 +73,7 @@ class MainProfilePage extends StatelessWidget {
                         runSpacing: 20.0, // 자식 요소 간의 수직 간격
                         children: List.generate(controller.chk.value, (index) {
                           return GestureDetector(
-                            onTap: () => Get.to(() => const UserRegistrationPage()),
+                            onTap: () => Get.to(() => UserRegistrationPage()),
                             child: Container(
                               width: 150,
                               height: 170,
