@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'Camera_Service_Page.dart';
+import 'package:get/get.dart';
+import 'camera_service_page.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:math' as math;
-import '../providers/camera_provider.dart';
+import '../Controllers/Camera_Controller.dart'; // GetX CameraControllerX
 
 class CameraPage extends StatelessWidget {
   final VoidCallback onProfileAdded;
@@ -12,9 +12,11 @@ class CameraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => CameraProvider(),
-      child: CameraPageContent(onProfileAdded: onProfileAdded),
+    return GetBuilder<CameraControllerX>(
+      init: CameraControllerX(),
+      builder: (cameraController) {
+        return CameraPageContent(onProfileAdded: onProfileAdded);
+      },
     );
   }
 }
@@ -26,11 +28,11 @@ class CameraPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cameraProvider = Provider.of<CameraProvider>(context);
+    final CameraControllerX cameraController = Get.find();
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
+        Get.back();
         return true;
       },
       child: Scaffold(
@@ -61,37 +63,40 @@ class CameraPageContent extends StatelessWidget {
                   height: 250,
                   child: GestureDetector(
                     onTap: () {
-                      if (cameraProvider.videoPlayerController != null &&
-                          cameraProvider.videoPlayerController!.value.isInitialized) {
-                        if (cameraProvider.videoPlayerController!.value.position ==
-                            cameraProvider.videoPlayerController!.value.duration) {
-                          cameraProvider.videoPlayerController!.seekTo(Duration.zero);
-                          cameraProvider.videoPlayerController!.play();
+                      if (cameraController.videoPlayerController != null &&
+                          cameraController.videoPlayerController!.value.isInitialized) {
+                        if (cameraController.videoPlayerController!.value.position ==
+                            cameraController.videoPlayerController!.value.duration) {
+                          cameraController.videoPlayerController!.seekTo(Duration.zero);
+                          cameraController.videoPlayerController!.play();
                         }
                       }
                     },
-                    child: cameraProvider.videoPath == null
-                        ? Image.asset(
-                      'assets/Camera_Page.png',
-                      fit: BoxFit.contain,
-                    )
-                        : cameraProvider.videoPlayerController != null &&
-                        cameraProvider.videoPlayerController!.value.isInitialized
-                        ? Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.identity()..rotateY(math.pi),
-                      child: AspectRatio(
-                        aspectRatio: cameraProvider.videoPlayerController!.value.aspectRatio,
-                        child: VideoPlayer(cameraProvider.videoPlayerController!),
-                      ),
-                    )
-                        : Container(),
+                    child: Obx(() {
+                      return cameraController.videoPath.value == null
+                          ? Image.asset(
+                        'assets/Camera_Page.png',
+                        fit: BoxFit.contain,
+                      )
+                          : cameraController.videoPlayerController != null &&
+                          cameraController.videoPlayerController!.value.isInitialized
+                          ? Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.identity()..rotateY(math.pi),
+                        child: AspectRatio(
+                          aspectRatio: cameraController.videoPlayerController!.value.aspectRatio,
+                          child: VideoPlayer(cameraController.videoPlayerController!),
+                        ),
+                      )
+                          : Container();
+                    }),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              if (cameraProvider.videoPath == null)
-                SizedBox(
+              Obx(() {
+                return cameraController.videoPath.value == null
+                    ? SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
@@ -102,15 +107,10 @@ class CameraPageContent extends StatelessWidget {
                       ),
                     ),
                     onPressed: () async {
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CameraServicePage(),
-                        ),
-                      );
+                      final result = await Get.to(() => CameraServicePage());
 
                       if (result != null) {
-                        cameraProvider.initializeVideoPlayer(result);
+                        cameraController.initializeVideoPlayer(result);
                       }
                     },
                     child: const Text(
@@ -122,8 +122,7 @@ class CameraPageContent extends StatelessWidget {
                     ),
                   ),
                 )
-              else
-                Column(
+                    : Column(
                   children: [
                     SizedBox(
                       width: double.infinity,
@@ -136,15 +135,10 @@ class CameraPageContent extends StatelessWidget {
                           ),
                         ),
                         onPressed: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CameraServicePage(),
-                            ),
-                          );
+                          final result = await Get.to(() => CameraServicePage());
 
                           if (result != null) {
-                            cameraProvider.initializeVideoPlayer(result);
+                            cameraController.initializeVideoPlayer(result);
                           }
                         },
                         child: const Text(
@@ -169,7 +163,7 @@ class CameraPageContent extends StatelessWidget {
                         ),
                         onPressed: () {
                           onProfileAdded();
-                          Navigator.pop(context, true);  // true 값을 반환하며 페이지를 닫음
+                          Get.back(result: true); // true 값을 반환하며 페이지를 닫음
                         },
                         child: const Text(
                           '현재 동영상으로 진행',
@@ -181,7 +175,8 @@ class CameraPageContent extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
+                );
+              }),
             ],
           ),
         ),

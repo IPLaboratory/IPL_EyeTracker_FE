@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../Providers/Sign_Up_Provider.dart';
+import 'package:get/get.dart';
+import '../Controllers/Sign_Up_Controller.dart';
 import '../Dismiss_Keyboard.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -8,9 +8,11 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => SignUpProvider(),
-      child: const SignUpPageContent(),
+    return GetBuilder<SignUpController>(
+      init: SignUpController(),
+      builder: (signUpController) {
+        return const SignUpPageContent();
+      },
     );
   }
 }
@@ -20,7 +22,7 @@ class SignUpPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final signUpProvider = Provider.of<SignUpProvider>(context);
+    final SignUpController signUpController = Get.find();
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFF9D0),
@@ -52,7 +54,7 @@ class SignUpPageContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 TextField(
-                  onChanged: (value) => signUpProvider.setUsername(value),
+                  onChanged: (value) => signUpController.setUsername(value),
                   decoration: const InputDecoration(
                     labelText: '아이디',
                     border: OutlineInputBorder(),
@@ -60,7 +62,7 @@ class SignUpPageContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TextField(
-                  onChanged: (value) => signUpProvider.setPassword(value),
+                  onChanged: (value) => signUpController.setPassword(value),
                   decoration: const InputDecoration(
                     labelText: '비밀번호',
                     border: OutlineInputBorder(),
@@ -69,7 +71,7 @@ class SignUpPageContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TextField(
-                  onChanged: (value) => signUpProvider.setConfirmPassword(value),
+                  onChanged: (value) => signUpController.setConfirmPassword(value),
                   decoration: const InputDecoration(
                     labelText: '비밀번호 확인',
                     border: OutlineInputBorder(),
@@ -77,14 +79,17 @@ class SignUpPageContent extends StatelessWidget {
                   obscureText: true,
                 ),
                 const SizedBox(height: 8),
-                if (signUpProvider.errorMessage.isNotEmpty)
-                  Text(
-                    signUpProvider.errorMessage,
+                Obx(() {
+                  return signUpController.errorMessage.isNotEmpty
+                      ? Text(
+                    signUpController.errorMessage.value,
                     style: const TextStyle(
                       color: Colors.red,
                       fontSize: 12,
                     ),
-                  ),
+                  )
+                      : Container();
+                }),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
@@ -97,7 +102,7 @@ class SignUpPageContent extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      signUpProvider.navigateToMainProfilePage(context);
+                      signUpController.navigateToMainProfilePage();
                     },
                     child: const Text(
                       '삶의 질을 높이러 가기',
