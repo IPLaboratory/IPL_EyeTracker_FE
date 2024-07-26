@@ -7,6 +7,7 @@ import 'User_Registration_Page/User_Registration.dart';
 import 'Fake_Splash.dart';
 import 'Profile_Page/Main_Profile.dart'; // MainProfilePage 임포트
 import 'Device_Select_Page/Main_Device.dart'; // MainDevicePage 임포트
+import 'User_Registration_Page/Machine_Recognition.dart'; // MachineRecognitionPage 임포트
 
 void main() {
   runApp(MyApp());
@@ -27,9 +28,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/camera', page: () => CameraPage(onProfileAdded: () {
           // 프로필 추가 로직
         })),
-        GetPage(name: '/user_registration', page: () => const UserRegistrationPage()),
+        GetPage(name: '/user_registration', page: () => UserRegistrationPage()),
         GetPage(name: '/mainProfile', page: () => const MainProfilePage()), // MainProfilePage 경로 추가
         GetPage(name: '/mainDevice', page: () => MainDevicePage()), // MainDevicePage 경로 추가
+        GetPage(name: '/machineRecognition', page: () => const MachineRecognitionPage()), // MachineRecognitionPage 경로 추가
       ],
     );
   }

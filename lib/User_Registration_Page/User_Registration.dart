@@ -1,66 +1,13 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:real_test/User_Registration_Page/Machine_Recognition.dart';
+import 'package:get/get.dart';
+import 'package:real_test/Controllers/UserRegistration/User_Registration_Controller.dart';
 
-class UserRegistrationPage extends StatefulWidget {
-  const UserRegistrationPage({super.key});
-
-  @override
-  _UserRegistrationPageState createState() => _UserRegistrationPageState();
-}
-
-class _UserRegistrationPageState extends State<UserRegistrationPage> {
-  // 각 입력 필드에 대한 텍스트 컨트롤러 생성
-  final List<TextEditingController> _nameControllers = List.generate(3, (_) => TextEditingController());
-  final List<TextEditingController> _descriptionControllers = List.generate(3, (_) => TextEditingController());
-  List<String?> _imagePaths = List.generate(3, (_) => 'assets/Camera_Test.png');
-
-  void showWarningSnackbar(BuildContext context) {
-    final snackBar = SnackBar(
-      content: AwesomeSnackbarContent(
-        title: '이런!',
-        message: '기기 인식이 제대로 안 됐어요.\n 다시 한 번 기기에 눈을 마주쳐 주세요.',
-        contentType: ContentType.warning,
-      ),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  @override
-  void dispose() {
-    // 페이지가 종료될 때 텍스트 컨트롤러 해제
-    for (var controller in _nameControllers) {
-      controller.dispose();
-    }
-    for (var controller in _descriptionControllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
-  Future<void> _navigateToCameraPage(BuildContext context, int index) async {
-    final picker = ImagePicker();
-
-    if (!await Permission.camera.request().isGranted) {
-      // 카메라 접근 권한 요청
-      return;
-    }
-
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      setState(() {
-        _imagePaths[index] = pickedFile.path;
-      });
-    }
-  }
+class UserRegistrationPage extends StatelessWidget {
+  final UserRegistrationController controller = Get.put(UserRegistrationController());
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +21,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
         ),
         actions: [
@@ -119,29 +66,30 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                           children: [
                             ListTile(
                               leading: GestureDetector(
-                                onTap: () => _navigateToCameraPage(context, index),
-                                child: SizedBox(
-                                  width: 50, // 이미지 너비 조절
-                                  height: 50, // 이미지 높이 조절
-                                  child: _imagePaths[index] != null && _imagePaths[index]!.startsWith('assets/')
-                                      ? Image.asset(
-                                    _imagePaths[index]!,
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                  )
-                                      : _imagePaths[index] != null
-                                      ? Image.file(
-                                    File(_imagePaths[index]!),
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                  )
-                                      : Container(), // null safety 추가
-                                ),
+                                onTap: () => _navigateToCameraPage(index),
+                                child: Obx(() {
+                                  final imagePath = controller.imagePaths[index].value;
+                                  return SizedBox(
+                                    width: 50, // 이미지 너비 조절
+                                    height: 50, // 이미지 높이 조절
+                                    child: imagePath.startsWith('assets/')
+                                        ? Image.asset(
+                                      imagePath,
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    )
+                                        : Image.file(
+                                      File(imagePath),
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                }),
                               ),
                               title: TextField(
-                                controller: _nameControllers[index],
+                                controller: controller.nameControllers[index],
                                 decoration: InputDecoration(
                                   hintText: '이름을 작성해 주세요.',
                                   hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
@@ -161,7 +109,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                                 textAlign: TextAlign.left,
                               ),
                               subtitle: TextField(
-                                controller: _descriptionControllers[index],
+                                controller: controller.descriptionControllers[index],
                                 decoration: InputDecoration(
                                   hintText: '설명을 작성해 주세요.',
                                   hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
@@ -201,10 +149,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const MachineRecognitionPage()),
-                          );
+                          Get.toNamed('/machineRecognition');
                         },
                         child: const Text(
                           '기기 등록하러 가기',
@@ -246,5 +191,35 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         },
       ),
     );
+  }
+
+  Future<void> _navigateToCameraPage(int index) async {
+    final picker = ImagePicker();
+
+    if (!await Permission.camera.request().isGranted) {
+      // 카메라 접근 권한 요청
+      return;
+    }
+
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      controller.updateImagePath(index, pickedFile.path);
+    }
+  }
+
+  void showWarningSnackbar(BuildContext context) {
+    final snackBar = SnackBar(
+      content: AwesomeSnackbarContent(
+        title: '이런!',
+        message: '기기 인식이 제대로 안 됐어요.\n 다시 한 번 기기에 눈을 마주쳐 주세요.',
+        contentType: ContentType.warning,
+      ),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
