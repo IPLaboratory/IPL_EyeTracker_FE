@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // dotenv 패키지 추가
 import 'Main_Page/Main_Page.dart'; // HomeScreen이 정의된 파일
 import 'Sign_Up_Page/Sign_Up_Page.dart';
 import 'Camera_Page/Camera_Page.dart';
@@ -9,7 +10,8 @@ import 'Profile_Page/Main_Profile.dart'; // MainProfilePage 임포트
 import 'Device_Select_Page/Main_Device.dart'; // MainDevicePage 임포트
 import 'User_Registration_Page/Machine_Recognition.dart'; // MachineRecognitionPage 임포트
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: 'assets/.env'); // .env 파일 로드
   runApp(MyApp());
 }
 
