@@ -14,7 +14,8 @@ class ChangeProfilePage extends StatelessWidget {
       init: ProfileController(),
       builder: (controller) {
         return Scaffold(
-          backgroundColor: const Color(0xFFFFF9D0), // 배경색 설정
+          backgroundColor: const Color(0xFFFFF9D0),// 배경색 설정
+          resizeToAvoidBottomInset: false,//키보드가 올라와도 텍스트 필드 영역이 온전하게 보이도록
           appBar: AppBar(
             backgroundColor: const Color(0xFFFFF9D0),
             elevation: 0, // 그림자 제거
