@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:real_test/Profile_Page/Main_Profile.dart';
-import '../../User_Registration_Page/User_Registration.dart';
 import '../../Sign_Up_Page/Sign_Up_Page.dart';
 
 class LoginController extends GetxController {
