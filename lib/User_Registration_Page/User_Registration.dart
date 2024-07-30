@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:real_test/Controllers/UserRegistration/User_Registration_Controller.dart';
+import 'package:real_test/User_Registration_Page/Machine_Recognition.dart';
 
 class UserRegistrationPage extends StatelessWidget {
   final UserRegistrationController controller = Get.put(UserRegistrationController());
@@ -149,7 +150,9 @@ class UserRegistrationPage extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Get.toNamed('/machineRecognition');
+                          Navigator.of(context).push(
+                            _createRoute(),
+                          );
                         },
                         child: const Text(
                           '기기 등록하러 가기',
@@ -222,4 +225,24 @@ class UserRegistrationPage extends StatelessWidget {
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+}
+
+//페이지 간 애니메이션 넣기
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondartAnimation) => MachineRecognitionPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.easeIn;
+      final tween = Tween(begin: begin, end: end);
+
+      final curvedAnimation = CurvedAnimation(parent: animation, curve: curve);
+
+      return SlideTransition(
+        position: tween.animate(curvedAnimation),
+        child: child,
+      );
+    },
+  );
 }

@@ -3,9 +3,14 @@ import 'package:get/get.dart';
 import 'package:real_test/Feature_Settings_Page/Main_Settings.dart';
 import 'package:real_test/Controllers/UserRegistration/Machine_Recogniton_Controller.dart'; // Controller import
 
-class MachineRecognitionPage extends StatelessWidget {
+class MachineRecognitionPage extends StatefulWidget {
   const MachineRecognitionPage({super.key});
 
+  @override
+  _MachineRecognitionPage createState() => _MachineRecognitionPage();
+}
+
+class _MachineRecognitionPage extends State<MachineRecognitionPage>{
   @override
   Widget build(BuildContext context) {
     final MachineRecognitionController controller = Get.put(MachineRecognitionController());
