@@ -15,7 +15,7 @@ class LoginButton extends StatelessWidget {
     final LoginController loginController = Get.find();
 
     return SizedBox(
-      width: width ?? 335, // 기본 너비를 200으로 설정
+      width: width ?? 335, // 기본 너비를 335으로 설정
       height: height ?? 50, // 기본 높이를 50으로 설정
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -24,9 +24,9 @@ class LoginButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(4.0),
           ),
         ),
-        onPressed: () {
+        onPressed: () async {
           unfocusAll();
-          loginController.login();
+          await loginController.login(); // 로그인 로직 호출
         },
         child: const Text(
           '로그인',
