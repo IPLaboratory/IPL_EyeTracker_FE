@@ -25,7 +25,7 @@ class SignupLink extends StatelessWidget {
         GestureDetector(
           onTap: () {
             unfocusAll();
-            loginController.navigateToSignUp();
+            loginController.navigateToSignUp(context); // BuildContext 전달
           },
           child: const Text(
             '지금 가입하세요.',
