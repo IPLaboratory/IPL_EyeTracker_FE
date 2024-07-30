@@ -37,7 +37,7 @@ class SignUpController extends GetxController {
       return;
     }
 
-    final url = dotenv.env['API_URL'] ?? ''; // 환경 변수에서 URL 가져오기
+    final url = dotenv.env['SIGN_UP_URL'] ?? ''; // 환경 변수에서 URL 가져오기
 
     try {
       final response = await http.post(

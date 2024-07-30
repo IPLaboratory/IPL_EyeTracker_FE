@@ -59,6 +59,17 @@ class LoginForm extends StatelessWidget {
             },
           ),
         ),
+        Obx(() {
+          return loginController.errorMessage.isNotEmpty
+              ? Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              loginController.errorMessage.value,
+              style: const TextStyle(color: Colors.red),
+            ),
+          )
+              : Container();
+        }),
       ],
     );
   }
