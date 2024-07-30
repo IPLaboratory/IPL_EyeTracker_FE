@@ -111,6 +111,11 @@ class ChangeProfilePage extends StatelessWidget {
                           ),
                           onPressed: () {
                             // 저장 버튼 클릭 시 동작 추가
+                            if (controller.selectedImage.value != null) {
+                              controller.patchUserProfileImage(controller.selectedImage.value!.path);
+                            } else {
+                              print("이미지가 선택되지 않았습니다.");
+                            }
                           },
                           child: const Text(
                             '저장',
