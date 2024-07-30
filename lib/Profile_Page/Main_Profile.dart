@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // SVG 파일 사용을 위한 패키지
 import 'package:get/get.dart';
 import '../Camera_Page/Camera_Page.dart'; // CameraPage 파일 임포트
-import '../User_Registration_Page/User_Registration.dart'; // UserRegistrationPage 파일 임포트
+import '../User_Registration_Page/Widget/User_Registration.dart'; // UserRegistrationPage 파일 임포트
 import 'Change_Profile.dart'; // Change_ProfilePage 파일 임포트
 import '../Controllers/Profile/Main_Profile_Controller.dart'; // MainProfileController 임포트
 
