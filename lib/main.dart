@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart'; // dotenv 패키지 추가
 import 'package:real_test/Main_Page/Widgets/Home_Screen.dart'; // HomeScreen이 정의된 파일
 import 'Sign_Up_Page/Sign_Up_Page.dart';
 import 'Camera_Page/Camera_Page.dart';
-import 'User_Registration_Page/User_Registration.dart';
+import 'User_Registration_Page/Widget/User_Registration.dart';
 import 'Fake_Splash.dart';
 import 'Profile_Page/Main_Profile.dart'; // MainProfilePage 임포트
 import 'Device_Select_Page/Main_Device.dart'; // MainDevicePage 임포트

@@ -39,14 +39,14 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const TitleAndLogo(),
-                    LoginForm(
+                    const TitleAndLogo(), ////////////이거
+                    LoginForm( /////////////이거
                       usernameFocusNode: usernameFocusNode,
                       passwordFocusNode: passwordFocusNode,
                     ),
                     const SizedBox(height: 17),
-                    LoginButton(unfocusAll: _unfocusAll),
-                    SignupLink(unfocusAll: _unfocusAll),
+                    LoginButton(unfocusAll: _unfocusAll), //////////이거
+                    SignupLink(unfocusAll: _unfocusAll), ///////////이거
                   ],
                 ),
               ),
