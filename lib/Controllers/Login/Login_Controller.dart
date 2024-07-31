@@ -1,15 +1,16 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart'; // dotenv 패키지 추가
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import '../../Sign_Up_Page/Sign_Up_Page.dart';
-import 'package:animations/animations.dart'; // animations 패키지 추가
+import 'package:animations/animations.dart';
 
 class LoginController extends GetxController {
   var username = ''.obs;
   var password = ''.obs;
   var errorMessage = ''.obs;
+  var homeId = 0.obs; // homeId를 저장할 변수 추가
 
   void setUsername(String value) {
     username.value = value;
@@ -43,6 +44,8 @@ class LoginController extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(utf8.decode(response.bodyBytes));
         if (int.parse(data['status']) == 200) {
+          homeId.value = data['data']; // homeId 저장
+          print('Home ID: ${homeId.value}');
           Get.snackbar('Success', '홈 로그인 성공!');
           Get.toNamed('/mainProfile'); // 경로 이름 사용
         } else {
