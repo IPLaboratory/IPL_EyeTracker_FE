@@ -11,7 +11,7 @@ import 'Device_Select_Page/Main_Device.dart'; // MainDevicePage 임포트
 import 'User_Registration_Page/Machine_Recognition.dart'; // MachineRecognitionPage 임포트
 
 Future<void> main() async {
-  //await dotenv.load(fileName: 'assets/.env'); // .env 파일 로드
+  await dotenv.load(fileName: 'assets/.env'); // .env 파일 로드
   runApp(MyApp());
 }
 

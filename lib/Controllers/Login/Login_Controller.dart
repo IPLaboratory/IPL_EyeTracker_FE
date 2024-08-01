@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import '../../Sign_Up_Page/Sign_Up_Page.dart';
-import 'package:animations/animations.dart';
+//import 'package:animations/animations.dart';
 
 class LoginController extends GetxController {
   var username = ''.obs;
