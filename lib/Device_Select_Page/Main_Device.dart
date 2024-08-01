@@ -64,6 +64,7 @@ class MainDevicePage extends StatelessWidget {
                   ),
                   onPressed: () {
                     controller.stopEyeTracking();
+                    Get.toNamed('/mainProfile');
                   },
                   child: const Text(
                     '아이트래킹 종료하기',

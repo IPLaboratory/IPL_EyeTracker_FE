@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:real_test/Color/constants.dart';//칼라 임포트
+import 'package:real_test/Gesture_Page/Main_Gesture.dart';
 import 'package:real_test/User_Registration_Page/Machine_Recognition.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
@@ -53,6 +54,31 @@ class RegistrationBtn extends StatelessWidget{
             },
             child: const Text(
               'Test',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.buttonColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const MainGesturePage()),
+              );
+            },
+            child: const Text(
+              '제스처 선택(기능목록)',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black,

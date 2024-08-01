@@ -55,6 +55,7 @@ class UserRegistrationPage extends StatelessWidget {
                     const Divider(color: Colors.grey, thickness: 1), // 등록된 기기 밑에 얇은 회색 선
                     const SizedBox(height: 0), // 간격 조절
                     RegistrationPart(),
+                    const SizedBox(height: 20), // 간격 조절
                     RegistrationBtn(),
                   ],
                 ),
