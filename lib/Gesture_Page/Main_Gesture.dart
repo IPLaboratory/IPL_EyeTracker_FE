@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:real_test/Color/constants.dart';
 import 'package:real_test/Profile_Page/Main_Profile.dart';
+import 'Gesture_List_Part.dart';
 
 class MainGesturePage extends StatefulWidget {
   const MainGesturePage({super.key});
@@ -12,13 +14,13 @@ class MainGesturePage extends StatefulWidget {
 class _MainGesturePageState extends State<MainGesturePage> {
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF9D0),
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-      backgroundColor: const Color(0xFFFFF9D0),
-      //backgroundColor: const Color(0xFFFFd9D0),// 배경색 설정
-      elevation: 0, // 그림자 제거
-      actions: [
-        const SizedBox(width: 10), // 약간의 간격 추가
+        backgroundColor: AppColors.backgroundColor,
+        //backgroundColor: const Color(0xFFFFd9D0),// 배경색 설정
+        elevation: 0, // 그림자 제거
+        actions: [
+          const SizedBox(width: 10), // 약간의 간격 추가
         ],
       ),
       body:Padding(
@@ -66,76 +68,11 @@ class _MainGesturePageState extends State<MainGesturePage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Divider(color: Colors.grey, thickness: 1), //얇은 회색 선 추가
+                  Divider(color: AppColors.textColor, thickness: 1), //얇은 회색 선 추가
                 ],
               ),
             ),
-            Expanded(
-              child: ListView(
-                children: [
-                  ListTile(
-                    leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Image.asset('assets/on.png'),
-                    ),
-                    title: const Text('기능이름: ON'),
-                    subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-                  ),
-                  const Divider(color: Colors.grey, thickness: 0.5),
-                  ListTile(
-                    leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Image.asset('assets/off.png'),
-                    ),
-                    title: const Text('기능이름: OFF'),
-                    subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-                  ),
-                    const Divider(color: Colors.grey, thickness: 0.5),
-                  ListTile(
-                    leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Image.asset('assets/skills.png'),
-                    ),
-                    title: const Text('기능이름: 바람 세기'),
-                    subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-                  ),
-                  const Divider(color: Colors.grey, thickness: 0.5),
-                  ListTile(
-                    leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Image.asset('assets/skills.png'),
-                    ),
-                    title: const Text('기능이름: 회전'),
-                    subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-                  ),
-                  const Divider(color: Colors.grey, thickness: 0.5),
-                  ListTile(
-                    leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Image.asset('assets/skills.png'),
-                    ),
-                    title: const Text('기능이름: 작동 시간 예약'),
-                    subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-                  ),
-                  const Divider(color: Colors.grey, thickness: 0.5),
-                  ListTile(
-                    leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Image.asset('assets/skills.png'),
-                    ),
-                    title: const Text('기능이름: 자연풍'),
-                    subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-                  ),
-                  const Divider(color: Colors.grey, thickness: 0.5),
-                ],
-              ),
-            ),
+            GestureListPart(),
           ],
         ),
       ),
