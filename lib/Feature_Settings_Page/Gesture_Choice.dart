@@ -77,19 +77,19 @@ class GestureChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView(
-        children: [
-          _buildGestureItem('북쪽', '무섭다.', 'assets/Gesture_Image.png'),
-          _buildGestureItem('남쪽', '두렵다.', 'assets/Gesture_Image.png'),
-          _buildGestureItem('동쪽', '재밌다.', 'assets/Gesture_Image.png'),
-          _buildGestureItem('서쪽', '즐겁다.', 'assets/Gesture_Image.png'),
-          _buildGestureItem('동남쪽', '행복하다.', 'assets/Gesture_Image.png'),
-          _buildGestureItem('서남쪽', '슬프다.', 'assets/Gesture_Image.png'),
-          _buildGestureItem('동북쪽', '우울하다.', 'assets/Gesture_Image.png'),
-          _buildGestureItem('서북쪽', '화난다.', 'assets/Gesture_Image.png'),
-        ],
-      ),
+    return ListView(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: [
+        _buildGestureItem('북쪽', '무섭다.', 'assets/Gesture_Image.png'),
+        _buildGestureItem('남쪽', '두렵다.', 'assets/Gesture_Image.png'),
+        _buildGestureItem('동쪽', '재밌다.', 'assets/Gesture_Image.png'),
+        _buildGestureItem('서쪽', '즐겁다.', 'assets/Gesture_Image.png'),
+        _buildGestureItem('동남쪽', '행복하다.', 'assets/Gesture_Image.png'),
+        _buildGestureItem('서남쪽', '슬프다.', 'assets/Gesture_Image.png'),
+        _buildGestureItem('동북쪽', '우울하다.', 'assets/Gesture_Image.png'),
+        _buildGestureItem('서북쪽', '화난다.', 'assets/Gesture_Image.png'),
+      ],
     );
   }
 }

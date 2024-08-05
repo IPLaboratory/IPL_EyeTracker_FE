@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class MachineRecognitionController extends GetxController {
-  RxString currentDevice = '온열등'.obs;
+  RxString currentDevice = ''.obs;
   final List<Device> registeredDevices = [
     Device(name: '선풍기', description: '시원한 바람이 나오는 가전제품이다.', imagePath: 'assets/fan.jpg'),
     Device(name: '무드등', description: '분위기를 만들어주는 가전제품이다.', imagePath: 'assets/light.jpg'),

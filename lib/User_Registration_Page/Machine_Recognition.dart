@@ -4,6 +4,7 @@ import 'package:real_test/Controllers/UserRegistration/Machine_Recogniton_Contro
 import 'package:real_test/Color/constants.dart';
 import 'Already_Device_Part.dart';
 import 'Connected_Device_Part.dart'; // Controller import
+import 'package:real_test/Dismiss_Keyboard.dart'; // DismissKeyboard import
 
 class MachineRecognitionPage extends StatefulWidget {
   const MachineRecognitionPage({super.key});
@@ -12,7 +13,7 @@ class MachineRecognitionPage extends StatefulWidget {
   _MachineRecognitionPage createState() => _MachineRecognitionPage();
 }
 
-class _MachineRecognitionPage extends State<MachineRecognitionPage>{
+class _MachineRecognitionPage extends State<MachineRecognitionPage> {
   @override
   Widget build(BuildContext context) {
     final MachineRecognitionController controller = Get.put(MachineRecognitionController());
@@ -29,36 +30,31 @@ class _MachineRecognitionPage extends State<MachineRecognitionPage>{
           },
         ),
         actions: [
-          IconButton(
-            icon: Image.asset(
-              'assets/Test_Profile.png', // 이미지 경로
-              width: 35,
-              height: 35,
-            ),
-            onPressed: () {
-              // 버튼 기능 추가 예정
-            },
-          ),
+          // 이전에 'Test_Profile.png'를 사용했던 부분을 제거
           const SizedBox(width: 10), // 약간의 간격 추가
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ConnectedDevicePart(),
-            const Text(
-              '등록된 기기',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+      body: DismissKeyboard(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ConnectedDevicePart(),
+                const Text(
+                  '등록된 기기',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Divider(color: AppColors.greyLineColor, thickness: 1), // 얇은 회색 선 추가
+                const SizedBox(height: 20),
+                AlreadyDevicePart(),
+              ],
             ),
-            const Divider(color: AppColors.greyLineColor, thickness: 1), // 얇은 회색 선 추가
-            const SizedBox(height: 20),
-            AlreadyDevicePart(),
-          ],
+          ),
         ),
       ),
     );
