@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:real_test/Color/constants.dart';//칼라 임포트
+import 'package:real_test/Color/constants.dart'; // 칼라 임포트
 import 'Registration_Part.dart';
 import 'Registration_btn.dart';
 
 class UserRegistrationPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,16 +21,7 @@ class UserRegistrationPage extends StatelessWidget {
           },
         ),
         actions: [
-          IconButton(
-            icon: Image.asset(
-              'assets/Test_Profile.png', // 이미지 경로
-              width: 25,
-              height: 35,
-            ),
-            onPressed: () {
-              // 버튼 기능 추가 예정
-            },
-          ),
+          // 이전에 'Test_Profile.png'를 사용했던 부분을 제거
           const SizedBox(width: 10), // 약간의 간격 추가
         ],
       ),
