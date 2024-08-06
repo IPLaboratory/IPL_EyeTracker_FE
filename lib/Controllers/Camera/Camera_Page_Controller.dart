@@ -21,7 +21,7 @@ class CameraPageController extends GetxController {
   }
 
   Future<void> uploadVideo(String name) async {
-/*    if (videoPath.value != null) {
+    if (videoPath.value != null) {
       final url = dotenv.env['ADD_MEMBER_URL'] ?? ''; // .env 파일에서 ADD_MEMBER_URL 가져오기
 
       if (url.isEmpty) {
@@ -46,7 +46,7 @@ class CameraPageController extends GetxController {
         var responseBody = jsonDecode(responseData.body);
         Get.snackbar('실패', responseBody['message'] ?? '비디오 업로드 실패');
       }
-    }*/
+    }
   }
 
   @override
