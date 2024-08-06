@@ -87,16 +87,7 @@ class MainSettingsPage extends StatelessWidget {
                           ),
                         ),
                         onPressed: controller.isRegistering.value ? null : () {
-                          controller.startRegistering();
-                          showRegistrationInProgress(context);
-                          Future.delayed(Duration(seconds: 2), () {
-                            controller.stopRegistering();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('주파수가 연결되었습니다.'),
-                              ),
-                            );
-                          });
+                          controller.startRegistering(context);
                         },
                         child: const Text(
                           '연결하기',
@@ -134,6 +125,7 @@ class MainSettingsPage extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
+                      controller.saveSettings();
                       Get.toNamed('/mainDevice');
                     },
                     child: const Text(

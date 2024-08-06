@@ -43,6 +43,17 @@ class _ConnectedDevicePartState extends State<ConnectedDevicePart> {
     });
   }
 
+  Future<void> _registerDevice() async {
+    if (_textController.text.isNotEmpty && _imageFile != null) {
+      File imageFile = File(_imageFile!.path);
+      await controller.sendDeviceToServer(_textController.text, imageFile);
+    } else {
+      // Handle the case where either the text field is empty or no image is selected
+      print('Device name or image is missing');
+      Get.snackbar('Error', 'Device name or image is missing');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DismissKeyboard(
@@ -112,7 +123,8 @@ class _ConnectedDevicePartState extends State<ConnectedDevicePart> {
                   borderRadius: BorderRadius.circular(4.0),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
+                await _registerDevice();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => MainSettingsPage()),
