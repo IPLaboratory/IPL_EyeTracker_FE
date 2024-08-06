@@ -51,23 +51,60 @@ class MainProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     const AdjustableText(
-                      text: '아이트랙킹할 프로필을 추가해주세요.',
+                      text: '아이트랙킹할 프로필을 선택해주세요.',
                       fontSize: 20,
                       color: AppColors.textColor,
                     ),
                     Expanded(
                       child: Obx(() {
                         //이미지 표시 여부에 따라 이미지 위젯을 조건부 렌더링
-                        if (controller.isImageVisible.value) {
+                        if (profileController.profiles.length == 0) {
                           return Transform.translate(
                             offset: const Offset(0, 57), // 텍스트 아래로 이동
-                            child: SizedBox(
-                              width: 300, // 원하는 너비로 조절
-                              height: 300, // 원하는 높이로 조절
-                              child: Image.asset(
-                                'assets/Main_Profile.png',
-                                fit: BoxFit.contain,
-                              ),
+
+                            //이 부분은 값이 0일때 이미지가 보이도록 하기
+                            // child: SizedBox(
+                            //   width: 300, // 원하는 너비로 조절
+                            //   height: 300, // 원하는 높이로 조절
+                            //   child: Image.asset(
+                            //     'assets/Main_Profile.png',
+                            //     fit: BoxFit.contain,
+                            //   ),
+                            // ),
+
+                            //이 부분은 값이 0일때 프로필 모양인데 대신 +가 들어있음
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,  // 중앙 정렬 (필요에 따라 조정)
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final result = await Get.to(() => CameraPage(onProfileAdded: controller.addProfile));
+                                      },
+                                      child: Container(
+                                        width: 130,
+                                        height: 129,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(20.0),  // 둥근 모서리 적용
+                                        ),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.add,  // 원하는 아이콘을 설정하세요
+                                            size: 70,  // 아이콘의 크기
+                                            color: AppColors.textColor,  // 아이콘의 색상
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 130,
+                                      height: 129,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           );
                         } else {
