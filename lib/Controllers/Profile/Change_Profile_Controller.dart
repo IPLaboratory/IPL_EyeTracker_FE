@@ -1,28 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart'; // dotenv 패키지 추가
 import 'package:real_test/Controllers/Login/Login_Controller.dart';
-// LoginController를 가져오는 경로는 실제 경로에 맞게 수정하세요
-
-/*class ProfileController extends GetxController {
-  var selectedImage = Rx<XFile?>(null);
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> getImage(ImageSource imageSource) async {
-    final XFile? selectImage = await _picker.pickImage(
-      source: imageSource,
-    );
-
-    if (selectImage != null) {
-      selectedImage.value = selectImage;
-      await uploadImage(selectImage.path);
-    }
-  }
-}*/
+import 'package:http_parser/http_parser.dart';  // http_parser 패키지 추가
+import 'package:http/http.dart' as http;
 
 
 class ProfileController extends GetxController {
@@ -41,23 +24,26 @@ class ProfileController extends GetxController {
       await uploadImage(selectImage.path);
     }
   }
-
   Future<void> uploadImage(String filePath) async {
     if(filePath != null){
-      final url = dotenv.env['ADD_MEMBER_URL'] ?? ''; //.env 파일에서 ADD_MEMVER_URL 가져오기
+      print("파일 주소: " + filePath);
+      final url = dotenv.env['UPDATE_MEMBER_URL'] ?? ''; //.env 파일에서 UPDATE_MEMBER_URL 가져오기
 
       if(url.isEmpty){
         Get.snackbar('실패', 'ADD_MEMBER_URL이 설정되지 않았습니다.');
         return;
       }
       var request = http.MultipartRequest(
-        'POST',
+        'PUT',
         Uri.parse(url),
       );
-      request.fields['homeId'] = loginController.homeId.value.toString(); // homeId를 롱 값으로 전송
-      request.fields['name'] = nameController.text;
-      request.files.add(await http.MultipartFile.fromPath('jpg', filePath));
-
+      //사용자 ID
+      request.fields['id'] = '1';
+      //새로운 사용자 이름
+      request.fields['name'] = 'ddd';
+      //새로운 사진 파일
+      //request.files.add(await http.MultipartFile.fromPath('jpg', filePath));
+      request.files.add(await http.MultipartFile.fromPath('file', filePath));
       var response = await request.send();
       if (response.statusCode == 200) {
         Get.snackbar('성공', '사진 업로드 성공');
