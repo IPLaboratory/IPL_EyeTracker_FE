@@ -3,10 +3,15 @@ import 'package:get/get.dart';
 import 'package:real_test/Color/constants.dart'; // 칼라 임포트
 import 'Registration_Part.dart';
 import 'Registration_btn.dart';
+import 'package:real_test/Controllers/UserRegistration/User_Registration_Controller.dart';
 
 class UserRegistrationPage extends StatelessWidget {
+  final UserRegistrationController controller = Get.put(UserRegistrationController());
+
   @override
   Widget build(BuildContext context) {
+    controller.fetchAllDevices(); // 페이지가 로드될 때 전체 기기 목록을 가져옴
+
     return Scaffold(
       resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면이 조정되도록 설정
       backgroundColor: AppColors.backgroundColor, // 배경색 설정
@@ -21,7 +26,6 @@ class UserRegistrationPage extends StatelessWidget {
           },
         ),
         actions: [
-          // 이전에 'Test_Profile.png'를 사용했던 부분을 제거
           const SizedBox(width: 10), // 약간의 간격 추가
         ],
       ),

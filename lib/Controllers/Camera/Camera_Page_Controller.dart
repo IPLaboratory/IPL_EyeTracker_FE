@@ -30,6 +30,8 @@ class CameraPageController extends GetxController {
         return;
       }
 
+      print('요청 URL: $url'); // 요청 URL 로그 출력
+
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(url), // 서버의 API 엔드포인트로 변경하세요
@@ -63,6 +65,8 @@ class CameraPageController extends GetxController {
         return;
       }
 
+      print('첫 번째 요청 URL: $url1'); // 첫 번째 요청 URL 로그 출력
+
       // 첫 번째 비디오 업로드
       var request1 = http.MultipartRequest(
         'POST',
@@ -88,7 +92,7 @@ class CameraPageController extends GetxController {
           return;
         }
 
-        print('두 번째 비디오 파일 경로: $secondVideoPath');
+        print('두 번째 요청 URL: $url2'); // 두 번째 요청 URL 로그 출력
 
         // 두 번째 비디오 파일 읽기
         var secondVideoFile = File(secondVideoPath!);
