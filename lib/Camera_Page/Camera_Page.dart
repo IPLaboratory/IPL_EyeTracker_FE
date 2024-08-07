@@ -144,15 +144,8 @@ class CameraPageContent extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4.0),
                             ),
                           ),
-                          onPressed: () async {
-                            final name = nameController.text;
-                            if (name.isNotEmpty) {
-                              await cameraController.uploadVideo(name);
-                              onProfileAdded();
-                              Get.back(result: true); // true 값을 반환하며 페이지를 닫음
-                            } else {
-                              Get.snackbar('실패', '이름을 입력해주세요.');
-                            }
+                          onPressed: () {
+                            _showOptionDialog(context, nameController.text, cameraController);
                           },
                           child: const Text(
                             '현재 동영상으로 진행',
@@ -170,6 +163,62 @@ class CameraPageContent extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showOptionDialog(BuildContext context, String name, CameraPageController cameraController) {
+    Get.dialog(
+      AlertDialog(
+        title: const Center(
+          child: Text(
+            '안경을 쓰셨나요?\n안경을 쓰셨다면 벗고 다시 찍어주세요.',
+            style: TextStyle(
+              fontSize: 15, // 텍스트 크기 조절
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  // '네' 버튼 클릭 시 동작 추가
+                  final result = await Get.to(() => CameraServicePage());
+
+                  if (result != null) {
+                    cameraController.secondVideoPath = result;
+                    await cameraController.uploadTwoVideos(name);
+                    onProfileAdded(); // 페이지를 닫기 전에 프로필 추가 콜백 호출
+                    Get.back();
+                  }
+                },
+                child: const Text(
+                  '네',
+                  style: TextStyle(
+                    fontSize: 18, // 텍스트 크기 조절
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  // '아니오' 버튼 클릭 시 동작 추가
+                  await cameraController.uploadVideo(name);
+                  onProfileAdded(); // 페이지를 닫기 전에 프로필 추가 콜백 호출
+                  Get.back();
+                },
+                child: const Text(
+                  '아니오',
+                  style: TextStyle(
+                    fontSize: 18, // 텍스트 크기 조절
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

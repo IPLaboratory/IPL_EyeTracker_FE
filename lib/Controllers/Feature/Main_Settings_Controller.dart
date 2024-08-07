@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:real_test/Feature_Settings_Page/Notification.dart';
 import 'package:real_test/Controllers/Feature/Gesture_Choice_Controller.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:real_test/Controllers/UserRegistration/Machine_Recogniton_Controller.dart';
 
 class MainSettingsController extends GetxController {
   var functionName = ''.obs;
@@ -12,6 +13,7 @@ class MainSettingsController extends GetxController {
   var irValue = ''.obs;
 
   final GestureChoiceController gestureController = Get.put(GestureChoiceController()); // GestureChoiceController 인스턴스 참조
+  final MachineRecognitionController machineRecognitionController = Get.put(MachineRecognitionController()); // MachineRecognitionController 인스턴스 참조
 
   void setFunctionName(String name) {
     functionName.value = name;
@@ -75,9 +77,15 @@ class MainSettingsController extends GetxController {
 
   Future<void> saveSettings() async {
     final selectedGesture = gestureController.selectedGesture.value;
+    final deviceId = machineRecognitionController.deviceId.value;
 
     if (selectedGesture.isEmpty) {
       Get.snackbar('Error', '제스처를 선택하세요.');
+      return;
+    }
+
+    if (deviceId.isEmpty) {
+      Get.snackbar('Error', 'Device ID가 없습니다.');
       return;
     }
 
@@ -86,15 +94,16 @@ class MainSettingsController extends GetxController {
       final response = await http.post(
         url,
         body: {
-          'functionName': functionName.value,
-          'gesture': selectedGesture, // 선택한 제스처 값 사용
-          'irValue': irValue.value,
+          'deviceId': deviceId,
+          'name': functionName.value,
+          'ir': irValue.value,
+          'gestureId': '1', // 임의로 지정한 gestureId
         },
       );
       print('Save settings response: ${response.statusCode} - ${response.body}'); // 로그 추가
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         final responseData = jsonDecode(response.body);
-        if (responseData['status'] == 200) {
+        if (responseData['status'] == 201) {
           Get.snackbar('Success', '설정이 성공적으로 저장되었습니다.');
         } else {
           Get.snackbar('Error', '설정을 저장하는 데 실패했습니다.');
