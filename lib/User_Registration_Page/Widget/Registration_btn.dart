@@ -12,6 +12,7 @@ class RegistrationBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.end, // 버튼을 맨 아래로 내리기 위해 추가
       children: [
         SizedBox(
           width: double.infinity,

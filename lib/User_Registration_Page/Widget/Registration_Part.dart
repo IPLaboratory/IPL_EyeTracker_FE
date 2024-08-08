@@ -13,18 +13,21 @@ class RegistrationPart extends StatelessWidget {
         children: [
           const Divider(color: AppColors.greyLineColor, thickness: 0.5, height: 1), // 등록된 기기 바로 아래 회색선
           if (controller.devices.isEmpty)
-            SizedBox(
-              height: 200,
+            Expanded(
               child: Center(child: Text('등록된 기기가 없습니다.')),
             )
           else
-            ...controller.devices.map((device) => ListTile(
-              leading: device['photoPath'] != null
-                  ? Image.network(device['photoPath'])
-                  : Icon(Icons.devices),
-              title: Text(device['name']),
-              subtitle: Text('ID: ${device['id']}'),
-            )),
+            Expanded(
+              child: ListView(
+                children: controller.devices.map((device) => ListTile(
+                  leading: device['photoPath'] != null
+                      ? Image.network(device['photoPath'])
+                      : Icon(Icons.devices),
+                  title: Text(device['name']),
+                  subtitle: Text('ID: ${device['id']}'),
+                )).toList(),
+              ),
+            ),
           const Divider(color: AppColors.greyLineColor, thickness: 0.5, height: 1), // 맨 아래 회색선
         ],
       );
