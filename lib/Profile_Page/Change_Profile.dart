@@ -38,6 +38,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         return Scaffold(
           backgroundColor: const Color(0xFFFFF9D0), // 배경색 설정
           appBar: AppBar(
+            scrolledUnderElevation: 0, //스크롤시 AppBar 그림자 색 0으로 해주기
             backgroundColor: const Color(0xFFFFF9D0),
             elevation: 0, // 그림자 제거
             actions: [

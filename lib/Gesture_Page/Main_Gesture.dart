@@ -18,6 +18,7 @@ class _MainGesturePageState extends State<MainGesturePage> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
+        scrolledUnderElevation: 0, //스크롤시 AppBar 그림자 색 0으로 해주기
         backgroundColor: AppColors.backgroundColor,
         //backgroundColor: const Color(0xFFFFd9D0),// 배경색 설정
         elevation: 0, // 그림자 제거

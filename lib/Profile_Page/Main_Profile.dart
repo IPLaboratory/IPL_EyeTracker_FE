@@ -25,6 +25,7 @@ class MainProfilePage extends StatelessWidget {
             return Scaffold(
               backgroundColor: AppColors.backgroundColor, // 배경색 설정
               appBar: AppBar(
+                scrolledUnderElevation: 0, //스크롤시 AppBar 그림자 색 0으로 해주기 
                 backgroundColor: AppColors.backgroundColor, // 배경색 설정
                 elevation: 0, // 그림자 제거
                 actions: [
