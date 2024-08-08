@@ -4,8 +4,10 @@ import 'package:real_test/Profile_Page/Main_Profile.dart';
 import 'Gesture_List_Part.dart';
 
 class MainGesturePage extends StatefulWidget {
-  const MainGesturePage({super.key});
+  final String? photoPath;  // 이미지 경로를 받는 매개변수 추가
+  final String title;  // title을 받는 매개변수 추가
 
+  const MainGesturePage({super.key, this.photoPath, required this.title});
 
   @override
   _MainGesturePageState createState() => _MainGesturePageState();
@@ -39,18 +41,23 @@ class _MainGesturePageState extends State<MainGesturePage> {
             ),
             Transform.translate(
               offset: const Offset(0, 15),
-              child: SizedBox(
-                width: 150,
-                height: 150,
-                child: Image.asset(
-                  'assets/fan.png',
-                  fit: BoxFit.contain,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),  // 둥근 모서리 반지름 설정
+                child: SizedBox(
+                  width: 140,
+                  height: 140,
+                  child: widget.photoPath != null
+                      ? Image.network(widget.photoPath!)
+                      : Image.asset(
+                    'assets/기본사물.png',
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 7),
-            const AdjustableText(
-              text: '선풍기',
+            const SizedBox(height: 20),
+            AdjustableText(
+              text: widget.title,  // 전달받은 title을 표시
               fontSize: 17,
               fontWeight: FontWeight.bold,
               color: Colors.black,

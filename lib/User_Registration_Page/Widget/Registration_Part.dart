@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:real_test/Controllers/UserRegistration/User_Registration_Controller.dart';
 import 'package:real_test/Color/constants.dart';
+import 'package:real_test/Gesture_Page/Main_Gesture.dart';
 
 class RegistrationPart extends StatelessWidget {
   final UserRegistrationController controller = Get.put(UserRegistrationController());
@@ -25,6 +26,9 @@ class RegistrationPart extends StatelessWidget {
                       : Icon(Icons.devices),
                   title: Text(device['name']),
                   subtitle: Text('ID: ${device['id']}'),
+                  onTap: () {
+                    Get.to(() => MainGesturePage(photoPath: device['photoPath'], title: device['name']));  // 페이지 이동 시 이미지 경로 전달
+                  },
                 )).toList(),
               ),
             ),
