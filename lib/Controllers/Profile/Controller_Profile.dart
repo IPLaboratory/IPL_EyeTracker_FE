@@ -1,17 +1,26 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async'; // dart:async 패키지 추가
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:real_test/Controllers/Profile/Models_Profile.dart';
 
 class ControllerProfile extends GetxController {
   var profiles = <ModelsProfile>[].obs;
   var homeId = 0.obs; // homeId 저장 변수 추가
+  Timer? _timer; // Timer 객체 추가
 
   @override
   void onInit() {
     super.onInit();
     //fetchProfiles();
+    _startFetchingProfiles(); // 타이머 시작
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel(); // 타이머 취소
+    super.onClose();
   }
 
   void setHomeId(int id) {
@@ -51,5 +60,11 @@ class ControllerProfile extends GetxController {
 
   void addProfile(ModelsProfile profile) {
     profiles.add(profile);
+  }
+
+  void _startFetchingProfiles() {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      fetchProfiles();
+    });
   }
 }
