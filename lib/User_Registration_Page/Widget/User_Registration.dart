@@ -29,34 +29,27 @@ class UserRegistrationPage extends StatelessWidget {
           const SizedBox(width: 10), // 약간의 간격 추가
         ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '등록된 기기',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Divider(color: Colors.grey, thickness: 1), // 등록된 기기 밑에 얇은 회색 선
-                    const SizedBox(height: 0), // 간격 조절
-                    RegistrationPart(),
-                    const SizedBox(height: 20), // 간격 조절
-                    RegistrationBtn(),
-                  ],
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '등록된 기기',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          );
-        },
+            const Divider(color: Colors.grey, thickness: 1), // 등록된 기기 밑에 얇은 회색 선
+            const SizedBox(height: 8), // 간격 조절
+            Expanded(
+              child: RegistrationPart(),
+            ),
+            const SizedBox(height: 20), // 간격 조절
+            RegistrationBtn(),
+          ],
+        ),
       ),
     );
   }

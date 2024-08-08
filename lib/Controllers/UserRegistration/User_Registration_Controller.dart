@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async'; // Timer를 사용하기 위해 추가
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // dotenv 패키지 추가
 import 'package:real_test/Controllers/Login/Login_Controller.dart'; // LoginController를 가져오는 경로는 실제 경로에 맞게 수정하세요
 
@@ -12,6 +13,15 @@ class UserRegistrationController extends GetxController {
 
   final LoginController loginController = Get.find(); // LoginController 인스턴스 참조
   var devices = [].obs; // 전체 기기 목록을 저장할 Observable 리스트
+
+  Timer? _refreshTimer; // 주기적으로 데이터를 새로고침하기 위한 타이머
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchAllDevices(); // 초기 데이터 로드
+    _startAutoRefresh(); // 자동 새로고침 시작
+  }
 
   void updateImagePath(int index, String path) {
     imagePaths[index].value = path;
@@ -42,9 +52,6 @@ class UserRegistrationController extends GetxController {
         var responseData = jsonDecode(responseBody);
         devices.value = responseData['data']; // 전체 기기 목록 업데이트
         print('전체 기기 조회 성공: ${devices.length}개의 기기가 로드되었습니다.');
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Get.snackbar('Success', '전체 기기 조회 성공!');
-        });
       } else if (response.statusCode == 400) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Get.snackbar('Error', '홈을 찾을 수 없습니다.');
@@ -65,14 +72,21 @@ class UserRegistrationController extends GetxController {
     }
   }
 
+  void _startAutoRefresh() {
+    _refreshTimer = Timer.periodic(const Duration(seconds: 300), (timer) {
+      fetchAllDevices(); // 30초마다 fetchAllDevices 메서드 호출
+    });
+  }
+
   @override
-  void dispose() {
+  void onClose() {
+    _refreshTimer?.cancel(); // 컨트롤러가 dispose 될 때 타이머를 취소
     for (var controller in nameControllers) {
       controller.dispose();
     }
     for (var controller in descriptionControllers) {
       controller.dispose();
     }
-    super.dispose();
+    super.onClose();
   }
 }
