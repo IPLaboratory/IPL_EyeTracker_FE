@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import '../../Sign_Up_Page/Sign_Up_Page.dart';
 //import 'package:animations/animations.dart';
+import 'package:real_test/Controllers/Profile/Controller_Profile.dart';
 
 class LoginController extends GetxController {
   var username = ''.obs;
@@ -47,6 +48,13 @@ class LoginController extends GetxController {
           homeId.value = data['data']; // homeId 저장
           print('Home ID: ${homeId.value}');
           Get.snackbar('Success', '홈 로그인 성공!');
+
+          // GetX 컨트롤러 등록
+          Get.put(ControllerProfile());
+          // ControllerProfile 인스턴스 가져오기
+          final controllerProfile = Get.find<ControllerProfile>();
+          controllerProfile.setHomeId(homeId.value); // homeId를 ControllerProfile에 설정
+
           Get.toNamed('/mainProfile'); // 경로 이름 사용
         } else {
           errorMessage.value = data['message'];

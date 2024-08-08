@@ -16,6 +16,20 @@ class ChangeProfilePage extends StatefulWidget {
 }
 
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
+  late TextEditingController nameController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.profile.name); // 초기값 설정
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProfileController>(
@@ -97,6 +111,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextField(
+                      controller: nameController,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         labelText: widget.profile.name, // 선택한 프로필의 이름 표시
@@ -117,7 +132,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       onPressed: () {
                         // 저장 버튼 클릭 시 동작 추가
                         if (controller.selectedImage.value != null) {
-                          controller.uploadImage(controller.selectedImage.value!.path);
+                          //controller.uploadImage(controller.selectedImage.value!.path);
+                          controller.uploadImage(widget.profile.id, nameController.text, controller.selectedImage.value!.path);
                         } else {
                           print("이미지가 선택되지 않았습니다.");
                         }

@@ -13,6 +13,9 @@ class MainProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //프로필 수정 후에 UI 업데이트 위해서 작성
+    final ControllerProfile profileController = Get.put(ControllerProfile());
+
     return GetBuilder<MainProfileController>(
       init: MainProfileController(),
       builder: (controller) {
@@ -57,6 +60,8 @@ class MainProfilePage extends StatelessWidget {
                     ),
                     Expanded(
                       child: Obx(() {
+                        //출력
+                        print('Profile count: ${profileController.profiles.length}');
                         //이미지 표시 여부에 따라 이미지 위젯을 조건부 렌더링
                         if (profileController.profiles.length == 0) {
                           return Transform.translate(
@@ -108,6 +113,8 @@ class MainProfilePage extends StatelessWidget {
                             ),
                           );
                         } else {
+                          //출력
+                          print('Profile count2: ${profileController.profiles.length}');
                           return SingleChildScrollView(
                             child: Column(
                               children: [
