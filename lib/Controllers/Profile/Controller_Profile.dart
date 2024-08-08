@@ -63,7 +63,8 @@ class ControllerProfile extends GetxController {
   }
 
   void _startFetchingProfiles() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    //나중에 시현할때는 3으로 바꿔주기
+    _timer = Timer.periodic(Duration(seconds: 500), (timer) {
       fetchProfiles();
     });
   }
