@@ -63,21 +63,9 @@ class MainProfilePage extends StatelessWidget {
                         //출력
                         print('Profile count: ${profileController.profiles.length}');
                         //이미지 표시 여부에 따라 이미지 위젯을 조건부 렌더링
-                        if (profileController.profiles.length == 0) {
+                        if (profileController.profiles.isEmpty) {
                           return Transform.translate(
                             offset: const Offset(0, 57), // 텍스트 아래로 이동
-
-                            //이 부분은 값이 0일때 이미지가 보이도록 하기
-                            // child: SizedBox(
-                            //   width: 300, // 원하는 너비로 조절
-                            //   height: 300, // 원하는 높이로 조절
-                            //   child: Image.asset(
-                            //     'assets/Main_Profile.png',
-                            //     fit: BoxFit.contain,
-                            //   ),
-                            // ),
-
-                            //이 부분은 값이 0일때 프로필 모양인데 대신 +가 들어있음
                             child: Column(
                               children: <Widget>[
                                 Row(
@@ -85,7 +73,7 @@ class MainProfilePage extends StatelessWidget {
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: () async {
-                                        final result = await Get.to(() => CameraPage(onProfileAdded: controller.addProfile));
+                                        await Get.to(() => CameraPage(onProfileAdded: controller.addProfile));
                                       },
                                       child: Container(
                                         width: 130,
@@ -175,7 +163,7 @@ class MainProfilePage extends StatelessWidget {
                                   ),
                                 ),
                                 //프로필 개수가 5개보다 작으면 빈 공간 채우기
-                                if (profileController.profiles.length < 5) const Spacer(),
+                                if (profileController.profiles.length < 5) const SizedBox(height: 50),
                               ],
                             ),
                           );
@@ -195,7 +183,7 @@ class MainProfilePage extends StatelessWidget {
                             ),
                           ),
                           onPressed: () async {
-                            final result = await Get.to(() => CameraPage(onProfileAdded: controller.addProfile));
+                            await Get.to(() => CameraPage(onProfileAdded: controller.addProfile));
                           },
                           child: const Text(
                             '프로필 추가하기',
