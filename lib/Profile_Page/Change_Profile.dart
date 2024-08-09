@@ -136,7 +136,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                           //controller.uploadImage(controller.selectedImage.value!.path);
                           controller.uploadImage(widget.profile.id, nameController.text, controller.selectedImage.value!.path);
                         } else {
-                          print("이미지가 선택되지 않았습니다.");
+                          // 이미지가 선택되지 않았을 경우 id와 text만 넘김
+                          controller.uploadjustname(widget.profile.id, nameController.text);
                         }
                       },
                       child: const Text(

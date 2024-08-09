@@ -68,4 +68,37 @@ class ProfileController extends GetxController {
       }
     }
   }
+
+  Future<void> uploadjustname(int id, String name) async {
+    final url = dotenv.env['UPDATE_MEMBER_URL'] ?? ''; //.env 파일에서 UPDATE_MEMBER_URL 가져오기
+
+    if (url.isEmpty) {
+      Get.snackbar('실패', 'UPDATE_MEMBER_URL이 설정되지 않았습니다.');
+      return;
+    }
+
+    var request = http.Request('PUT', Uri.parse(url));
+
+    // 사용자 ID와 이름을 폼 데이터로 추가
+    request.bodyFields = {
+      'id': id.toString(),
+      'name': name,
+    };
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        Get.snackbar('성공', '데이터 업로드 성공');
+        await profileController.fetchProfiles(); // 데이터 다시 불러오기
+        Get.back(); // 페이지 닫기
+        Get.off(() => MainProfilePage()); // MainProfilePage로 이동 및 기존 페이지를 대체
+      } else {
+        var responseData = await http.Response.fromStream(response);
+        var responseBody = jsonDecode(responseData.body);
+        Get.snackbar('실패', responseBody['message'] ?? '데이터 업로드 실패');
+      }
+    } catch (e) {
+      Get.snackbar('오류', '데이터 업로드 중 오류가 발생했습니다: $e');
+    }
+  }
 }
