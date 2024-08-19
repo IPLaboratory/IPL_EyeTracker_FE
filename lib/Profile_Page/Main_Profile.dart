@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // SVG 파일 사용을 위한 패키지
 import 'package:get/get.dart';
+import 'dart:convert';// base64Decode 함수 사용을 위해 추가
 import '../Camera_Page/Camera_Page.dart'; // CameraPage 파일 임포트
 import '../Profile_Page/Change_Profile.dart'; // ChangeProfile 파일 임포트
 import '../User_Registration_Page/Widget/User_Registration.dart'; // UserRegistrationPage 파일 임포트
@@ -13,7 +14,6 @@ class MainProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //프로필 수정 후에 UI 업데이트 위해서 작성
     final ControllerProfile profileController = Get.put(ControllerProfile());
 
     return GetBuilder<MainProfileController>(
@@ -23,15 +23,15 @@ class MainProfilePage extends StatelessWidget {
           init: ControllerProfile(),
           builder: (profileController) {
             return Scaffold(
-              backgroundColor: AppColors.backgroundColor, // 배경색 설정
+              backgroundColor: AppColors.backgroundColor,
               appBar: AppBar(
-                scrolledUnderElevation: 0, //스크롤시 AppBar 그림자 색 0으로 해주기 
-                backgroundColor: AppColors.backgroundColor, // 배경색 설정
-                elevation: 0, // 그림자 제거
+                scrolledUnderElevation: 0,
+                backgroundColor: AppColors.backgroundColor,
+                elevation: 0,
                 actions: [
                   IconButton(
                     icon: SvgPicture.asset(
-                      'assets/Pencil.svg', // SVG 파일 경로
+                      'assets/Pencil.svg',
                       width: 30,
                       height: 30,
                     ),
@@ -39,14 +39,14 @@ class MainProfilePage extends StatelessWidget {
                       controller.toggleChange();
                     },
                   ),
-                  const SizedBox(width: 10), // 약간의 간격 추가
+                  const SizedBox(width: 10),
                 ],
               ),
               body: Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start, // 텍스트를 위쪽에 배치
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 5), // 원하는 높이로 조절 가능
+                    const SizedBox(height: 5),
                     const AdjustableText(
                       text: 'E.T.',
                       fontSize: 50,
@@ -61,16 +61,13 @@ class MainProfilePage extends StatelessWidget {
                     ),
                     Expanded(
                       child: Obx(() {
-                        //출력
-                        print('Profile count: ${profileController.profiles.length}');
-                        //이미지 표시 여부에 따라 이미지 위젯을 조건부 렌더링
                         if (profileController.profiles.isEmpty) {
                           return Transform.translate(
-                            offset: const Offset(0, 57), // 텍스트 아래로 이동
+                            offset: const Offset(0, 57),
                             child: Column(
                               children: <Widget>[
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,  // 중앙 정렬 (필요에 따라 조정)
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: () async {
@@ -81,13 +78,13 @@ class MainProfilePage extends StatelessWidget {
                                         height: 129,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20.0),  // 둥근 모서리 적용
+                                          borderRadius: BorderRadius.circular(20.0),
                                         ),
                                         child: Center(
                                           child: Icon(
-                                            Icons.add,  // 원하는 아이콘을 설정하세요
-                                            size: 70,  // 아이콘의 크기
-                                            color: AppColors.textColor,  // 아이콘의 색상
+                                            Icons.add,
+                                            size: 70,
+                                            color: AppColors.textColor,
                                           ),
                                         ),
                                       ),
@@ -102,8 +99,6 @@ class MainProfilePage extends StatelessWidget {
                             ),
                           );
                         } else {
-                          //출력
-                          print('Profile count2: ${profileController.profiles.length}');
                           return SingleChildScrollView(
                             child: Column(
                               children: [
@@ -111,8 +106,8 @@ class MainProfilePage extends StatelessWidget {
                                   width: double.infinity,
                                   margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                                   child: Wrap(
-                                    spacing: 20.0, // 자식 요소 간의 수평 간격
-                                    runSpacing: 20.0, // 자식 요소 간의 수직 간격
+                                    spacing: 20.0,
+                                    runSpacing: 20.0,
                                     children: List.generate(profileController.profiles.length, (index) {
                                       final profile = profileController.profiles[index];
                                       return GestureDetector(
@@ -130,7 +125,9 @@ class MainProfilePage extends StatelessWidget {
                                                   image: DecorationImage(
                                                     image: profile.photoPath != null && profile.photoPath!.isNotEmpty
                                                         ? NetworkImage(profile.photoPath!)
-                                                        : const AssetImage('assets/Default_Profile.jpg') as ImageProvider,
+                                                        : (profile.photoBase64 != null && profile.photoBase64!.isNotEmpty)
+                                                        ? MemoryImage(base64Decode(profile.photoBase64!))
+                                                        : AssetImage('assets/Default_Profile.jpg') as ImageProvider,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -142,7 +139,7 @@ class MainProfilePage extends StatelessWidget {
                                                   icon: const Icon(Icons.edit, size: 30),
                                                   color: Colors.white,
                                                 )
-                                                    : Container(), // isChange가 false일 때 빈 컨테이너를 표시
+                                                    : Container(),
                                               ),
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -151,7 +148,7 @@ class MainProfilePage extends StatelessWidget {
                                                     profile.name,
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
-                                                      fontFamily: 'Maple', //한글 폰트 적용
+                                                      fontFamily: 'Maple',
                                                     ),
                                                   )
                                                 ],
@@ -163,7 +160,6 @@ class MainProfilePage extends StatelessWidget {
                                     }),
                                   ),
                                 ),
-                                //프로필 개수가 5개보다 작으면 빈 공간 채우기
                                 if (profileController.profiles.length < 5) const SizedBox(height: 50),
                               ],
                             ),
@@ -172,7 +168,7 @@ class MainProfilePage extends StatelessWidget {
                       }),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0), // 버튼 주위에 여백 추가
+                      padding: const EdgeInsets.all(16.0),
                       child: SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -204,34 +200,6 @@ class MainProfilePage extends StatelessWidget {
           },
         );
       },
-    );
-  }
-}
-
-class AdjustableText extends StatelessWidget {
-  final String text;
-  final double fontSize;
-  final FontWeight? fontWeight;
-  final Color color;
-
-  const AdjustableText({
-    required this.text,
-    required this.fontSize,
-    this.fontWeight,
-    required this.color,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: fontWeight ?? FontWeight.normal,
-        color: color,
-      ),
     );
   }
 }

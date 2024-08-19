@@ -57,12 +57,12 @@ class _MainGesturePageState extends State<MainGesturePage> {
               ),
             ),
             const SizedBox(height: 20),
-            AdjustableText(
+/*            AdjustableText(
               text: widget.title,  // 전달받은 title을 표시
               fontSize: 17,
               fontWeight: FontWeight.bold,
               color: Colors.black,
-            ),
+            ),*/
             const SizedBox(height: 20),
             const SizedBox(
               width: double.infinity,

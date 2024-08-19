@@ -74,12 +74,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             height: 149,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5.0),
-                              image: DecorationImage(
+/*                              image: DecorationImage(
                                 image: widget.profile.photoPath != null && widget.profile.photoPath!.isNotEmpty
                                     ? NetworkImage(widget.profile.photoPath!)
                                     : const AssetImage('assets/Default_Profile.jpg') as ImageProvider,
                                 fit: BoxFit.cover,
-                              ),
+                              ),*/
                             ),
                           ),
                         if (controller.selectedImage.value != null)
@@ -132,13 +132,13 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       ),
                       onPressed: () {
                         // 저장 버튼 클릭 시 동작 추가
-                        if (controller.selectedImage.value != null) {
+                        /*if (controller.selectedImage.value != null) {
                           //controller.uploadImage(controller.selectedImage.value!.path);
                           controller.uploadImage(widget.profile.id, nameController.text, controller.selectedImage.value!.path);
                         } else {
                           // 이미지가 선택되지 않았을 경우 id와 text만 넘김
                           controller.uploadjustname(widget.profile.id, nameController.text);
-                        }
+                        }*/
                       },
                       child: const Text(
                         '저장',
