@@ -13,7 +13,6 @@ class ControllerProfile extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    //fetchProfiles();
     _startFetchingProfiles(); // 타이머 시작
   }
 
@@ -25,7 +24,6 @@ class ControllerProfile extends GetxController {
 
   void setHomeId(int id) {
     homeId.value = id;
-    print('HOME: ${homeId.value}');
     fetchProfiles(); // homeId 값이 설정되면 프로필 다시 가져오기
   }
 
@@ -37,19 +35,22 @@ class ControllerProfile extends GetxController {
     }
 
     try {
-      // URL에 homeId 값을 쿼리 매개변수로 추가
       final requestUrl = Uri.parse('$url?homeId=${homeId.value}');
       final response = await http.get(requestUrl);
-      print(requestUrl);
-
       if (response.statusCode == 200) {
-        String body = utf8.decode(response.bodyBytes); // utf8로 디코딩
+        String body = utf8.decode(response.bodyBytes);
         Map<String, dynamic> responseData = jsonDecode(body);
-        // 응답 데이터에서 'data' 키로 프로필 데이터를 추출
         List<dynamic> data = responseData['data'];
-        // 모델 인스턴스를 생성하여 프로필 리스트 업데이트
-        profiles.value = data.map((json) => ModelsProfile.fromJson(json)).toList();
-        print(profiles.value);
+        profiles.value = data.map((json) {
+          // Null 안전한 방식으로 JSON 파싱
+          final memberData = json['member'] ?? {};
+          return ModelsProfile(
+            id: memberData['id'] as int?,
+            name: memberData['name'] as String,
+            photoPath: memberData['photoPath'] as String?,
+            photoBase64: json['photo'] as String?,
+          );
+        }).toList();
       } else {
         throw Exception('Failed to load profiles');
       }
@@ -63,7 +64,6 @@ class ControllerProfile extends GetxController {
   }
 
   void _startFetchingProfiles() {
-    //나중에 시현할때는 3으로 바꿔주기
     _timer = Timer.periodic(Duration(seconds: 500), (timer) {
       fetchProfiles();
     });
