@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../Profile_Page/Main_Profile.dart';
+import 'dart:convert'; // base64Decode 사용
 import '../Controllers/Profile/Change_Profile_Controller.dart';
 import '../Controllers/Profile/Models_Profile.dart'; // ModelsProfile 임포트
 
@@ -74,12 +74,14 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             height: 149,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5.0),
-/*                              image: DecorationImage(
+                              image: DecorationImage(
                                 image: widget.profile.photoPath != null && widget.profile.photoPath!.isNotEmpty
                                     ? NetworkImage(widget.profile.photoPath!)
+                                    : widget.profile.photoBase64 != null && widget.profile.photoBase64!.isNotEmpty
+                                    ? MemoryImage(base64Decode(widget.profile.photoBase64!))
                                     : const AssetImage('assets/Default_Profile.jpg') as ImageProvider,
                                 fit: BoxFit.cover,
-                              ),*/
+                              ),
                             ),
                           ),
                         if (controller.selectedImage.value != null)
@@ -132,13 +134,13 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       ),
                       onPressed: () {
                         // 저장 버튼 클릭 시 동작 추가
-                        /*if (controller.selectedImage.value != null) {
+                        if (controller.selectedImage.value != null) {
                           //controller.uploadImage(controller.selectedImage.value!.path);
                           controller.uploadImage(widget.profile.id, nameController.text, controller.selectedImage.value!.path);
                         } else {
                           // 이미지가 선택되지 않았을 경우 id와 text만 넘김
                           controller.uploadjustname(widget.profile.id, nameController.text);
-                        }*/
+                        }
                       },
                       child: const Text(
                         '저장',
