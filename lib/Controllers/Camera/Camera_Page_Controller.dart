@@ -3,14 +3,14 @@ import 'package:video_player/video_player.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart'; // dotenv 패키지 추가
-import 'package:real_test/Controllers/Login/Login_Controller.dart'; // LoginController를 가져오는 경로는 실제 경로에 맞게 수정하세요
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:real_test/Controllers/Login/Login_Controller.dart';
 
 class CameraPageController extends GetxController {
   var videoPath = Rx<String?>(null);
-  String? secondVideoPath; // 두 번째 영상 경로 추가
+  String? secondVideoPath;
   VideoPlayerController? videoPlayerController;
-  final LoginController loginController = Get.find(); // LoginController 인스턴스 가져오기
+  final LoginController loginController = Get.find();
 
   void initializeVideoPlayer(String path) {
     videoPath.value = path;
@@ -23,112 +23,170 @@ class CameraPageController extends GetxController {
 
   Future<void> uploadVideo(String name) async {
     if (videoPath.value != null) {
-      final url = dotenv.env['ADD_MEMBER_URL1'] ?? ''; // .env 파일에서 ADD_MEMBER_URL1 가져오기
+      final url = dotenv.env['ADD_MEMBER_URL1'] ?? '';
 
       if (url.isEmpty) {
         Get.snackbar('실패', 'ADD_MEMBER_URL1이 설정되지 않았습니다.');
         return;
       }
 
-      print('요청 URL: $url'); // 요청 URL 로그 출력
+      print('요청 URL: $url');
 
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(url), // 서버의 API 엔드포인트로 변경하세요
-      );
-      request.fields['homeId'] = loginController.homeId.value.toString(); // homeId를 롱 값으로 전송
-      request.fields['name'] = name; // 사용자 이름을 스트링 값으로 전송
-      request.files.add(await http.MultipartFile.fromPath('video', videoPath.value!));
+      File videoFile = File(videoPath.value!);
+      int chunkSize = 1024 * 1536; // 1.5MB로 쪼개기
+      List<int> videoBytes = videoFile.readAsBytesSync();
+      String base64Video = base64Encode(videoBytes); // 전체 파일을 base64로 인코딩
+      int totalChunks = (base64Video.length / chunkSize).ceil();
 
-      var response = await request.send();
-      var responseData = await http.Response.fromStream(response);
-      print('서버 응답: ${responseData.statusCode}'); // 상태 코드 로그 출력
-      print('서버 응답 본문: ${responseData.body}'); // 응답 본문 로그 출력
+      print('비디오 파일 크기: ${videoFile.lengthSync()} bytes');
+      print('Base64 인코딩 후 길이: ${base64Video.length}');
+      print('총 청크 수: $totalChunks');
 
-      if (response.statusCode == 200) {
-        Get.snackbar('성공', '비디오 업로드 성공');
-        Get.toNamed('/mainProfile'); // 경로 이름 사용
-      } else {
-        var responseBody = jsonDecode(responseData.body);
-        Get.snackbar('실패', responseBody['message'] ?? '비디오 업로드 실패');
+      for (int i = 0; i < totalChunks; i++) {
+        int start = i * chunkSize;
+        int end = start + chunkSize;
+        if (end > base64Video.length) end = base64Video.length;
+
+        String base64Chunk = base64Video.substring(start, end);
+        print('청크 $i: 시작 위치 = $start, 끝 위치 = $end');
+
+        var request = http.MultipartRequest('POST', Uri.parse(url));
+        request.fields['homeId'] = loginController.homeId.value.toString();
+        request.fields['name'] = name;
+        request.fields['videoChunk'] = base64Chunk;
+        request.fields['chunkIndex'] = i.toString();
+        request.fields['totalChunks'] = totalChunks.toString();
+
+        print('서버로 전송 중: 청크 $i / $totalChunks');
+
+        var response = await request.send();
+        var responseData = await http.Response.fromStream(response);
+        print('서버 응답 상태 코드: ${responseData.statusCode}');
+        print('서버 응답 본문: ${responseData.body}');
+
+        if (response.statusCode != 200) {
+          var responseBody = jsonDecode(responseData.body);
+          print('비디오 업로드 실패: ${responseBody['message'] ?? '알 수 없는 오류'}');
+          Get.snackbar('실패', responseBody['message'] ?? '비디오 업로드 실패');
+          return;
+        }
       }
+
+      print('비디오 업로드 성공');
+      Get.snackbar('성공', '비디오 업로드 성공');
+      Get.toNamed('/mainProfile');
     }
   }
 
   Future<void> uploadTwoVideos(String name) async {
     if (videoPath.value != null && secondVideoPath != null) {
-      final url1 = dotenv.env['ADD_MEMBER_URL1'] ?? ''; // .env 파일에서 ADD_MEMBER_URL1 가져오기
-      final url2 = dotenv.env['ADD_MEMBER_URL2'] ?? ''; // .env 파일에서 ADD_MEMBER_URL2 가져오기
+      final url1 = dotenv.env['ADD_MEMBER_URL1'] ?? '';
+      final url2 = dotenv.env['ADD_MEMBER_URL2'] ?? '';
 
       if (url1.isEmpty || url2.isEmpty) {
         Get.snackbar('실패', 'ADD_MEMBER_URL1 또는 ADD_MEMBER_URL2가 설정되지 않았습니다.');
         return;
       }
 
-      print('첫 번째 요청 URL: $url1'); // 첫 번째 요청 URL 로그 출력
+      print('첫 번째 요청 URL: $url1');
 
       // 첫 번째 비디오 업로드
-      var request1 = http.MultipartRequest(
-        'POST',
-        Uri.parse(url1), // 서버의 첫 번째 API 엔드포인트로 변경하세요
-      );
-      request1.fields['homeId'] = loginController.homeId.value.toString(); // homeId를 롱 값으로 전송
-      request1.fields['name'] = name; // 사용자 이름을 스트링 값으로 전송
-      request1.files.add(await http.MultipartFile.fromPath('video', videoPath.value!));
+      File videoFile = File(videoPath.value!);
+      int chunkSize = 1024 * 1536; // 1.5MB로 쪼개기
+      List<int> videoBytes = videoFile.readAsBytesSync();
+      String base64Video = base64Encode(videoBytes);
+      int totalChunks = (base64Video.length / chunkSize).ceil();
 
-      var response1 = await request1.send();
-      var responseData1 = await http.Response.fromStream(response1);
-      print('첫 번째 비디오 서버 응답: ${responseData1.statusCode}'); // 상태 코드 로그 출력
-      print('첫 번째 비디오 서버 응답 본문: ${responseData1.body}'); // 응답 본문 로그 출력
+      print('첫 번째 비디오 파일 크기: ${videoFile.lengthSync()} bytes');
+      print('첫 번째 Base64 인코딩 후 길이: ${base64Video.length}');
+      print('총 청크 수: $totalChunks');
 
-      if (response1.statusCode == 200) {
-        var responseJson1 = jsonDecode(responseData1.body);
-        int memberId = responseJson1['data']['id']; // 첫 번째 응답에서 memberId 추출
+      int memberId = -1;
+      for (int i = 0; i < totalChunks; i++) {
+        int start = i * chunkSize;
+        int end = start + chunkSize;
+        if (end > base64Video.length) end = base64Video.length;
 
-        // 두 번째 비디오 파일 경로 확인
-        if (!File(secondVideoPath!).existsSync()) {
-          print('두 번째 비디오 파일이 존재하지 않습니다: $secondVideoPath');
-          Get.snackbar('실패', '두 번째 비디오 파일이 존재하지 않습니다.');
+        String base64Chunk = base64Video.substring(start, end);
+        print('청크 $i: 시작 위치 = $start, 끝 위치 = $end');
+
+        var request = http.MultipartRequest('POST', Uri.parse(url1));
+        request.fields['homeId'] = loginController.homeId.value.toString();
+        request.fields['name'] = name;
+        request.fields['videoChunk'] = base64Chunk;
+        request.fields['chunkIndex'] = i.toString();
+        request.fields['totalChunks'] = totalChunks.toString();
+
+        print('첫 번째 비디오 서버로 전송 중: 청크 $i / $totalChunks');
+
+        var response = await request.send();
+        var responseData = await http.Response.fromStream(response);
+        print('첫 번째 비디오 서버 응답 상태 코드: ${responseData.statusCode}');
+        print('첫 번째 비디오 서버 응답 본문: ${responseData.body}');
+
+        if (response.statusCode != 200) {
+          var responseBody = jsonDecode(responseData.body);
+          print('첫 번째 비디오 업로드 실패: ${responseBody['message'] ?? '알 수 없는 오류'}');
+          Get.snackbar('실패', responseBody['message'] ?? '첫 번째 비디오 업로드 실패');
           return;
+        } else if (i == totalChunks - 1) {
+          var responseJson = jsonDecode(responseData.body);
+          memberId = responseJson['data']['id'];
+          print('서버에서 받은 memberId: $memberId');
         }
+      }
 
-        print('두 번째 요청 URL: $url2'); // 두 번째 요청 URL 로그 출력
+      // 두 번째 비디오 업로드
+      print('두 번째 요청 URL: $url2');
 
-        // 두 번째 비디오 파일 읽기
-        var secondVideoFile = File(secondVideoPath!);
-        var secondVideoFileSize = await secondVideoFile.length();
-        print('두 번째 비디오 파일 크기: $secondVideoFileSize 바이트');
+      File secondVideoFile = File(secondVideoPath!);
+      List<int> secondVideoBytes = secondVideoFile.readAsBytesSync();
+      String base64SecondVideo = base64Encode(secondVideoBytes);
+      int secondTotalChunks = (base64SecondVideo.length / chunkSize).ceil();
 
-        // 두 번째 비디오 업로드
-        var request2 = http.MultipartRequest(
-          'POST',
-          Uri.parse(url2), // 서버의 두 번째 API 엔드포인트로 변경하세요
-        );
-        request2.fields['memberId'] = memberId.toString(); // memberId를 스트링 값으로 전송
-        request2.files.add(await http.MultipartFile.fromPath('video2', secondVideoPath!)); // 'video2'로 변경
+      print('두 번째 비디오 파일 크기: ${secondVideoFile.lengthSync()} bytes');
+      print('두 번째 Base64 인코딩 후 길이: ${base64SecondVideo.length}');
+      print('총 청크 수: $secondTotalChunks');
+
+      for (int i = 0; i < secondTotalChunks; i++) {
+        int start = i * chunkSize;
+        int end = start + chunkSize;
+        if (end > base64SecondVideo.length) end = base64SecondVideo.length;
+
+        String base64Chunk = base64SecondVideo.substring(start, end);
+        print('청크 $i: 시작 위치 = $start, 끝 위치 = $end');
+
+        var request2 = http.MultipartRequest('POST', Uri.parse(url2));
+        request2.fields['memberId'] = memberId.toString();
+        request2.fields['videoChunk'] = base64Chunk;
+        request2.fields['chunkIndex'] = i.toString();
+        request2.fields['totalChunks'] = secondTotalChunks.toString();
+
+        print('두 번째 비디오 서버로 전송 중: 청크 $i / $secondTotalChunks');
 
         var response2 = await request2.send();
         var responseData2 = await http.Response.fromStream(response2);
-        print('두 번째 비디오 서버 응답: ${responseData2.statusCode}'); // 상태 코드 로그 출력
-        print('두 번째 비디오 서버 응답 본문: ${responseData2.body}'); // 응답 본문 로그 출력
+        print('두 번째 비디오 서버 응답 상태 코드: ${responseData2.statusCode}');
+        print('두 번째 비디오 서버 응답 본문: ${responseData2.body}');
 
-        if (response2.statusCode == 200) {
-          Get.snackbar('성공', '두 번째 비디오 업로드 성공');
-          Get.toNamed('/mainProfile'); // 경로 이름 사용
-        } else {
+        if (response2.statusCode != 200) {
           var responseBody = jsonDecode(responseData2.body);
+          print('두 번째 비디오 업로드 실패: ${responseBody['message'] ?? '알 수 없는 오류'}');
           Get.snackbar('실패', responseBody['message'] ?? '두 번째 비디오 업로드 실패');
+          return;
         }
-      } else {
-        var responseBody = jsonDecode(responseData1.body);
-        Get.snackbar('실패', responseBody['message'] ?? '첫 번째 비디오 업로드 실패');
-        return; // 첫 번째 업로드가 실패하면 중단
       }
+
+      print('두 번째 비디오 업로드 성공');
+      Get.snackbar('성공', '두 번째 비디오 업로드 성공');
+      Get.toNamed('/mainProfile');
     } else {
       if (videoPath.value == null) {
+        print('첫 번째 비디오 경로가 설정되지 않았습니다.');
         Get.snackbar('실패', '첫 번째 비디오 경로가 설정되지 않았습니다.');
       }
       if (secondVideoPath == null) {
+        print('두 번째 비디오 경로가 설정되지 않았습니다.');
         Get.snackbar('실패', '두 번째 비디오 경로가 설정되지 않았습니다.');
       }
     }
