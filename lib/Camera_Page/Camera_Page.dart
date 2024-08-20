@@ -190,9 +190,17 @@ class CameraPageContent extends StatelessWidget {
 
                   if (result != null) {
                     cameraController.secondVideoPath = result;
+
+                    // 로딩 창 표시
+                    _showLoadingDialog();
+
                     await cameraController.uploadTwoVideos(name);
-                    onProfileAdded(); // 페이지를 닫기 전에 프로필 추가 콜백 호출
+
+                    // 로딩 창 닫기
                     Get.back();
+
+                    onProfileAdded(); // 페이지를 닫기 전에 프로필 추가 콜백 호출
+                    Get.offNamedUntil('/mainProfile', ModalRoute.withName('/home')); // 로그인 페이지를 남기고 스택을 지우고 프로필 페이지로 이동
                   }
                 },
                 child: const Text(
@@ -205,9 +213,17 @@ class CameraPageContent extends StatelessWidget {
               TextButton(
                 onPressed: () async {
                   // '아니오' 버튼 클릭 시 동작 추가
+
+                  // 로딩 창 표시
+                  _showLoadingDialog();
+
                   await cameraController.uploadVideo(name);
-                  onProfileAdded(); // 페이지를 닫기 전에 프로필 추가 콜백 호출
+
+                  // 로딩 창 닫기
                   Get.back();
+
+                  onProfileAdded(); // 페이지를 닫기 전에 프로필 추가 콜백 호출
+                  Get.offNamedUntil('/mainProfile', ModalRoute.withName('/home')); // 로그인 페이지를 남기고 스택을 지우고 프로필 페이지로 이동
                 },
                 child: const Text(
                   '아니오',
@@ -220,6 +236,15 @@ class CameraPageContent extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showLoadingDialog() {
+    Get.dialog(
+      const Center(
+        child: CircularProgressIndicator(),
+      ),
+      barrierDismissible: false, // 로딩 중에는 창을 닫을 수 없도록 설정
     );
   }
 }
