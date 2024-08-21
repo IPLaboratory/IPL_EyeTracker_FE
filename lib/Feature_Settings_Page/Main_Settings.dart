@@ -18,7 +18,7 @@ class MainSettingsPage extends StatelessWidget {
           scrolledUnderElevation: 0,
           backgroundColor: const Color(0xFFFFF9D0), // 배경색 설정
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -30,18 +30,18 @@ class MainSettingsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   '기능 추가',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Divider(color: Colors.grey, thickness: 1),
-                const SizedBox(height: 20),
+                const Divider(color: Colors.grey, thickness: 1),
+                const SizedBox(height: 10), // 간격을 줄였습니다.
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       '기능명 : ',
                       style: TextStyle(fontSize: 18),
                     ),
@@ -50,18 +50,18 @@ class MainSettingsPage extends StatelessWidget {
                       child: TextField(
                         onChanged: (value) => controller.setFunctionName(value),
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           hintText: '기능명을 입력하세요',
-                          contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0), // 패딩 조정
+                          contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0), // 패딩 조정
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10), // 간격을 줄였습니다.
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'IR 패킷 추가',
                       style: TextStyle(fontSize: 18),
                     ),
@@ -101,18 +101,21 @@ class MainSettingsPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                Divider(color: Colors.grey, thickness: 1), // 얇은 회색 선 추가
-                const SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 10), // 간격을 줄였습니다.
+                const Divider(color: Colors.grey, thickness: 1), // 얇은 회색 선 추가
+                const SizedBox(height: 10), // 간격 유지
+                const Text(
                   '제스처 선택',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10), // 약간의 간격 추가
-                GestureChoice(), // 제스처 선택 부분 추가
+                const SizedBox(height: 5), // 간격을 줄였습니다.
+                SizedBox(
+                  height: 300, // 제스처 선택 부분의 높이 설정
+                  child: GestureChoice(), // 제스처 선택 부분 추가
+                ),
                 const SizedBox(height: 20), // 약간의 간격 추가
                 SizedBox(
                   width: double.infinity,

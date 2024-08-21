@@ -35,19 +35,19 @@ class GestureChoice extends StatelessWidget {
                       children: [
                         Text(
                           '제스처명 : $gestureName',
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 5),
                         Text(
                           '설명: $description',
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
                     const Spacer(),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isSelected ? Color(0xFFD6A4FF) : const Color(0xFFCAF4FF),
+                        backgroundColor: isSelected ? const Color(0xFFD6A4FF) : const Color(0xFFCAF4FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0),
                         ),
@@ -78,8 +78,6 @@ class GestureChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
       children: [
         _buildGestureItem('북쪽', '무섭다.', 'assets/Gesture_Image.png'),
         _buildGestureItem('남쪽', '두렵다.', 'assets/Gesture_Image.png'),
