@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:typed_data'; // 바이너리 데이터를 처리하기 위해 추가
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // dotenv 패키지 추가
 import 'package:real_test/Controllers/Login/Login_Controller.dart'; // LoginController를 가져오는 경로는 실제 경로에 맞게 수정하세요
 
 class UserRegistrationController extends GetxController with GetTickerProviderStateMixin {
   final List<TextEditingController> nameControllers = List.generate(3, (_) => TextEditingController());
   final List<TextEditingController> descriptionControllers = List.generate(3, (_) => TextEditingController());
-  final List<RxString> imagePaths = List.generate(3, (_) => 'assets/Camera_Test.png'.obs);
+  var imageBytes = <Rx<Uint8List?>>[].obs; // 이미지 바이너리 데이터를 저장할 리스트
 
   final LoginController loginController = Get.find(); // LoginController 인스턴스 참조
   var devices = [].obs; // 전체 기기 목록을 저장할 Observable 리스트
@@ -31,12 +32,12 @@ class UserRegistrationController extends GetxController with GetTickerProviderSt
     fetchAllDevices();
   }
 
-  void updateImagePath(int index, String path) {
-    imagePaths[index].value = path;
-  }
-
   Future<void> fetchAllDevices() async {
     print('fetchAllDevices 호출됨: 갱신 시작'); // 갱신 시작 시 로그 출력
+
+    // 기존 데이터를 초기화
+    devices.clear();
+    imageBytes.clear(); // imageBytes도 초기화
 
     final String? url = dotenv.env['FIND_ALL_DEVICES']; // .env 파일에서 FIND_ALL_DEVICES_URL 가져오기
 
@@ -54,21 +55,45 @@ class UserRegistrationController extends GetxController with GetTickerProviderSt
 
     try {
       final response = await http.get(Uri.parse(requestUrl));
-      final responseBody = utf8.decode(response.bodyBytes); // UTF-8 디코딩
-
-      print('서버 응답: ${response.statusCode} - $responseBody'); // 서버 응답 로그 출력
+      print('서버 응답 상태 코드: ${response.statusCode}'); // 상태 코드 로그 출력
 
       if (response.statusCode == 200) {
-        var responseData = jsonDecode(responseBody);
-        devices.value = responseData['data']; // 전체 기기 목록 업데이트
-        print('전체 기기 조회 성공: ${devices.length}개의 기기가 로드되었습니다.');
+        final boundary = response.headers['content-type']?.split('boundary=')?.last;
+        if (boundary != null) {
+          var parts = response.body.split('--$boundary');
+          for (var part in parts) {
+            if (part.contains('Content-Disposition: form-data; name="deviceData"')) {
+              // JSON 데이터를 파싱
+              var deviceDataJson = part.split('\r\n\r\n')[1].split('\r\n')[0];
+
+              // UTF-8로 디코딩하여 문자열 처리
+              var deviceData = jsonDecode(utf8.decode(deviceDataJson.codeUnits));
+              devices.add({
+                'name': deviceData['name'],
+                'id': deviceData['deviceId'],
+              });
+
+              // imageBytes에 null 추가하여 리스트 길이 동기화
+              imageBytes.add(Rx<Uint8List?>(null));
+            } else if (part.contains('Content-Disposition: form-data; name="photo"')) {
+              // 이미지 바이너리 데이터를 처리
+              var imageIndex = devices.length - 1; // 마지막 추가된 기기의 이미지와 매칭
+              var imageBinaryData = part.split('\r\n\r\n')[1].trim().codeUnits;
+              var bytes = Uint8List.fromList(imageBinaryData);
+              if (imageIndex >= 0 && imageIndex < imageBytes.length) {
+                imageBytes[imageIndex].value = bytes;
+              }
+            }
+          }
+          print('전체 기기 조회 성공: ${devices.length}개의 기기가 로드되었습니다.');
+        }
       } else if (response.statusCode == 400) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Get.snackbar('Error', '홈을 찾을 수 없습니다.');
         });
         print('홈을 찾을 수 없습니다.');
       } else {
-        var responseData = jsonDecode(responseBody);
+        var responseData = jsonDecode(response.body);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Get.snackbar('Error', responseData['message'] ?? '전체 기기 조회 실패');
         });

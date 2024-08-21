@@ -18,6 +18,7 @@ class _MachineRecognitionPage extends State<MachineRecognitionPage> {
   @override
   Widget build(BuildContext context) {
     final MachineRecognitionController controller = Get.put(MachineRecognitionController());
+    final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return WillPopScope(
       onWillPop: () async {
@@ -37,30 +38,49 @@ class _MachineRecognitionPage extends State<MachineRecognitionPage> {
             },
           ),
           actions: [
-            const SizedBox(width: 10), // 약간의 간격 추가
+            const SizedBox(width: 5), // 약간의 간격 추가
           ],
         ),
         body: DismissKeyboard(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ConnectedDevicePart(),
-                  const Text(
-                    '등록된 기기',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: isKeyboardVisible
+                    ? const AlwaysScrollableScrollPhysics()
+                    : const NeverScrollableScrollPhysics(),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ConnectedDevicePart(),
+                        const Text(
+                          '등록된 기기',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Divider(
+                          color: AppColors.greyLineColor,
+                          thickness: 1,
+                        ), // 얇은 회색 선 추가
+                        const SizedBox(height: 7),
+                        // Expanded 대신 SizedBox를 사용하여 크기 제한
+                        SizedBox(
+                          height: 255, // 적절한 높이를 지정하세요.
+                          child: AlreadyDevicePart(),
+                        ),
+                      ],
                     ),
                   ),
-                  const Divider(color: AppColors.greyLineColor, thickness: 1), // 얇은 회색 선 추가
-                  const SizedBox(height: 20),
-                  AlreadyDevicePart(),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),

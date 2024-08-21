@@ -12,27 +12,40 @@ class RegistrationPart extends StatelessWidget {
     return Obx(() {
       return Column(
         children: [
-          const Divider(color: AppColors.greyLineColor, thickness: 0.5, height: 1), // 등록된 기기 바로 아래 회색선
           if (controller.devices.isEmpty)
             Expanded(
               child: Center(child: Text('등록된 기기가 없습니다.')),
             )
           else
             Expanded(
-              child: ListView(
-                children: controller.devices.map((device) => ListTile(
-                  leading: device['photoPath'] != null
-                      ? Image.network(device['photoPath'])
-                      : Icon(Icons.devices),
-                  title: Text(device['name']),
-                  subtitle: Text('ID: ${device['id']}'),
-                  onTap: () {
-                    Get.to(() => MainGesturePage(photoPath: device['photoPath'], title: device['name']));  // 페이지 이동 시 이미지 경로 전달
-                  },
-                )).toList(),
+              child: ListView.builder(
+                itemCount: controller.devices.length,
+                itemBuilder: (context, index) {
+                  final device = controller.devices[index];
+                  final imageBytes = controller.imageBytes[index].value;
+                  final bool isLastItem = index == controller.devices.length - 1;
+
+                  return Column(
+                    children: [
+                      const Divider(color: AppColors.greyLineColor, thickness: 0.5, height: 1), // 각 기기 위에 회색선 추가
+                      ListTile(
+                        leading: imageBytes != null
+                            ? Image.memory(imageBytes) // 바이너리 데이터를 이미지로 표시
+                            : Icon(Icons.devices),
+                        title: Text(device['name']),
+                        subtitle: Text('ID: ${device['id']}'),
+                        onTap: () {
+                          Get.to(() => MainGesturePage(photoPath: device['photoPath'], title: device['name']));  // 페이지 이동 시 이미지 경로 전달
+                        },
+                      ),
+                      if (isLastItem)
+                        const Divider(color: AppColors.greyLineColor, thickness: 0.5, height: 1), // 마지막 기기 아래에 회색선 추가
+                    ],
+                  );
+                },
               ),
             ),
-          const Divider(color: AppColors.greyLineColor, thickness: 0.5, height: 1), // 맨 아래 회색선
+          // 이곳에 추가적인 Divider는 제거하였습니다. 마지막 기기 아래에만 추가하므로 이곳에서는 필요 없습니다.
         ],
       );
     });
