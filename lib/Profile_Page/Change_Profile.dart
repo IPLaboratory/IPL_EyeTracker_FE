@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:typed_data'; // Uint8List 사용
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'dart:convert'; // base64Decode 사용
 import '../Controllers/Profile/Change_Profile_Controller.dart';
 import '../Controllers/Profile/Models_Profile.dart'; // ModelsProfile 임포트
 
 class ChangeProfilePage extends StatefulWidget {
-  final ModelsProfile profile; // 프로필 데이터 추가
+  final ModelsProfile profile;
+  final Uint8List? imageBytes; // MainProfilePage에서 전달받을 이미지 바이트 추가
 
-  const ChangeProfilePage({Key? key, required this.profile}) : super(key: key); // 생성자 수정
+  const ChangeProfilePage({
+    Key? key,
+    required this.profile,
+    this.imageBytes,
+  }) : super(key: key);
 
   @override
   _ChangeProfilePageState createState() => _ChangeProfilePageState();
@@ -17,11 +22,15 @@ class ChangeProfilePage extends StatefulWidget {
 
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
   late TextEditingController nameController;
+  Uint8List? imageBytes;
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.profile.name); // 초기값 설정
+    nameController = TextEditingController(text: widget.profile.name);
+
+    // MainProfilePage에서 넘겨받은 이미지 바이트를 사용
+    imageBytes = widget.imageBytes;
   }
 
   @override
@@ -45,7 +54,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
               const SizedBox(width: 10), // 약간의 간격 추가
             ],
           ),
-          body: SafeArea( // 상단과 하단의 여백을 유지하기 위해 SafeArea 사용
+          body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 16.0), // 상하 여백 추가
               child: Column(
@@ -68,34 +77,21 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   Obx(() {
                     return Stack(
                       children: [
-                        if (controller.selectedImage.value == null)
-                          Container(
-                            width: 150,
-                            height: 149,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              image: DecorationImage(
-                                image: widget.profile.photoPath != null && widget.profile.photoPath!.isNotEmpty
-                                    ? NetworkImage(widget.profile.photoPath!)
-                                    : widget.profile.photoBase64 != null && widget.profile.photoBase64!.isNotEmpty
-                                    ? MemoryImage(base64Decode(widget.profile.photoBase64!))
-                                    : const AssetImage('assets/Default_Profile.jpg') as ImageProvider,
-                                fit: BoxFit.cover,
-                              ),
+                        Container(
+                          width: 150,
+                          height: 149,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            image: DecorationImage(
+                              image: controller.selectedImage.value != null
+                                  ? FileImage(File(controller.selectedImage.value!.path))
+                                  : imageBytes != null
+                                  ? MemoryImage(imageBytes!)
+                                  : const AssetImage('assets/Default_Profile.jpg') as ImageProvider,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        if (controller.selectedImage.value != null)
-                          Container(
-                            width: 150,
-                            height: 149,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              image: DecorationImage(
-                                image: FileImage(File(controller.selectedImage.value!.path)),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
+                        ),
                         Positioned(
                           bottom: 0,
                           right: 0,
@@ -133,12 +129,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                         ),
                       ),
                       onPressed: () {
-                        // 저장 버튼 클릭 시 동작 추가
                         if (controller.selectedImage.value != null) {
-                          //controller.uploadImage(controller.selectedImage.value!.path);
                           controller.uploadImage(widget.profile.id, nameController.text, controller.selectedImage.value!.path);
                         } else {
-                          // 이미지가 선택되지 않았을 경우 id와 text만 넘김
                           controller.uploadjustname(widget.profile.id, nameController.text);
                         }
                       },
