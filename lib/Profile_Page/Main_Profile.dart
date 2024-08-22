@@ -9,6 +9,8 @@ import '../Controllers/Profile/Main_Profile_Controller.dart'; // MainProfileCont
 import '../Controllers/Profile/Controller_Profile.dart'; // ControllerProfile 임포트
 import '../Color/constants.dart';
 
+// 생략된 import와 클래스 선언
+
 class MainProfilePage extends StatelessWidget {
   const MainProfilePage({super.key});
 
@@ -23,15 +25,15 @@ class MainProfilePage extends StatelessWidget {
           init: ControllerProfile(),
           builder: (profileController) {
             return Scaffold(
-              backgroundColor: AppColors.backgroundColor,// 배경색 설정
+              backgroundColor: AppColors.backgroundColor, // 배경색 설정
               appBar: AppBar(
                 scrolledUnderElevation: 0, //스크롤시 AppBar 그림자 색 0으로 해주기
-                backgroundColor: AppColors.backgroundColor,// 배경색 설정
-                elevation: 0,// 그림자 제거
+                backgroundColor: AppColors.backgroundColor, // 배경색 설정
+                elevation: 0, // 그림자 제거
                 actions: [
                   IconButton(
                     icon: SvgPicture.asset(
-                      'assets/Pencil.svg',// SVG 파일 경로
+                      'assets/Pencil.svg', // SVG 파일 경로
                       width: 30,
                       height: 30,
                     ),
@@ -61,7 +63,6 @@ class MainProfilePage extends StatelessWidget {
                     ),
                     Expanded(
                       child: Obx(() {
-                        //이미지 표시 여부에 따라 이미지 위젯을 조건부 렌더링
                         if (profileController.profiles.isEmpty) {
                           return Transform.translate(
                             offset: const Offset(0, 57),
@@ -79,7 +80,7 @@ class MainProfilePage extends StatelessWidget {
                                         height: 129,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20.0),// 둥근 모서리 적용
+                                          borderRadius: BorderRadius.circular(20.0), // 둥근 모서리 적용
                                         ),
                                         child: Center(
                                           child: Icon(
@@ -111,6 +112,8 @@ class MainProfilePage extends StatelessWidget {
                                     runSpacing: 20.0,
                                     children: List.generate(profileController.profiles.length, (index) {
                                       final profile = profileController.profiles[index];
+                                      final imageBytes = profileController.imageBytes[index].value;
+
                                       return GestureDetector(
                                         onTap: () => Get.to(() => UserRegistrationPage()),
                                         child: Container(
@@ -124,10 +127,8 @@ class MainProfilePage extends StatelessWidget {
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(20.0),
                                                   image: DecorationImage(
-                                                    image: profile.photoPath != null && profile.photoPath!.isNotEmpty
-                                                        ? NetworkImage(profile.photoPath!)
-                                                        : (profile.photoBase64 != null && profile.photoBase64!.isNotEmpty)
-                                                        ? MemoryImage(base64Decode(profile.photoBase64!))
+                                                    image: imageBytes != null
+                                                        ? MemoryImage(imageBytes)
                                                         : AssetImage('assets/Default_Profile.jpg') as ImageProvider,
                                                     fit: BoxFit.cover,
                                                   ),
@@ -135,12 +136,16 @@ class MainProfilePage extends StatelessWidget {
                                                 child: controller.isChange.value
                                                     ? IconButton(
                                                   onPressed: () {
-                                                    Get.to(() => ChangeProfilePage(profile: profile));
+                                                    // ChangeProfilePage로 프로필과 이미지 바이트 넘겨줌
+                                                    Get.to(() => ChangeProfilePage(
+                                                      profile: profile,
+                                                      imageBytes: imageBytes,
+                                                    ));
                                                   },
                                                   icon: const Icon(Icons.edit, size: 30),
                                                   color: Colors.white,
                                                 )
-                                                    : Container(),// isChange가 false일 때 빈 컨테이너를 표시
+                                                    : Container(), // isChange가 false일 때 빈 컨테이너를 표시
                                               ),
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -161,7 +166,7 @@ class MainProfilePage extends StatelessWidget {
                                     }),
                                   ),
                                 ),
-                                //프로필 개수가 5개보다 작으면 빈 공간 채우기
+                                // 프로필 개수가 5개보다 작으면 빈 공간 채우기
                                 if (profileController.profiles.length < 5) const SizedBox(height: 50),
                               ],
                             ),
@@ -170,7 +175,7 @@ class MainProfilePage extends StatelessWidget {
                       }),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),// 버튼 주위에 여백 추가
+                      padding: const EdgeInsets.all(16.0), // 버튼 주위에 여백 추가
                       child: SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -205,6 +210,7 @@ class MainProfilePage extends StatelessWidget {
     );
   }
 }
+
 class AdjustableText extends StatelessWidget {
   final String text;
   final double fontSize;
