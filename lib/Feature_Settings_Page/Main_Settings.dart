@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Controllers/Feature/Main_Settings_Controller.dart';
+import '../Controllers/Feature/Start_Controller.dart'; // StartController 파일 임포트
 import 'Help_Icon.dart';
 import 'Gesture_Choice.dart'; // GestureChoice 위젯 임포트
 import 'Notification.dart'; // Notification 파일 임포트
@@ -8,6 +9,7 @@ import 'package:real_test/Dismiss_Keyboard.dart'; // DismissKeyboard 위젯 임�
 
 class MainSettingsPage extends StatelessWidget {
   final MainSettingsController controller = Get.put(MainSettingsController());
+  final StartController startController = Get.put(StartController()); // StartController 인스턴스 생성
 
   @override
   Widget build(BuildContext context) {
@@ -79,15 +81,15 @@ class MainSettingsPage extends StatelessWidget {
                     const SizedBox(width: 10),
                     SizedBox(
                       width: 197, // 버튼 너비 설정
-                      child: Obx(() => ElevatedButton(
+                      child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFCAF4FF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                         ),
-                        onPressed: controller.isRegistering.value ? null : () {
-                          controller.startRegistering(context);
+                        onPressed: () {
+                          // 연결하기 버튼 기능을 여기에 추가하세요.
                         },
                         child: const Text(
                           '연결하기',
@@ -97,7 +99,7 @@ class MainSettingsPage extends StatelessWidget {
                             color: Colors.black,
                           ),
                         ),
-                      )),
+                      ),
                     ),
                   ],
                 ),
@@ -117,29 +119,58 @@ class MainSettingsPage extends StatelessWidget {
                   child: GestureChoice(), // 제스처 선택 부분 추가
                 ),
                 const SizedBox(height: 20), // 약간의 간격 추가
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFCAF4FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFCAF4FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          onPressed: () {
+                            controller.saveSettings(); // 저장하기 버튼 기능
+                          },
+                          child: const Text(
+                            '저장하기',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    onPressed: () {
-                      controller.saveSettings();
-                      Get.toNamed('/mainDevice');
-                    },
-                    child: const Text(
-                      '저장하기',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                    const SizedBox(width: 10), // 두 버튼 사이의 간격 추가
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFCAF4FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          onPressed: () {
+                            startController.startEyeTracking(); // 시작하기 버튼을 누르면 startEyeTracking 메서드 호출
+                          },
+                          child: const Text(
+                            '시작하기',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
