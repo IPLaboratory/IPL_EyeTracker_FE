@@ -33,9 +33,13 @@ class RegistrationPart extends StatelessWidget {
                             ? Image.memory(imageBytes) // 바이너리 데이터를 이미지로 표시
                             : Icon(Icons.devices),
                         title: Text(device['name']),
-                        subtitle: Text('ID: ${device['id']}'),
+                        subtitle: Text('ID: ${device['id'].toString()}'),  // ID를 String으로 변환
                         onTap: () {
-                          Get.to(() => MainGesturePage(photoPath: device['photoPath'], title: device['name']));  // 페이지 이동 시 이미지 경로 전달
+                          Get.to(() => MainGesturePage(
+                            photoPath: device['photoPath'],
+                            title: device['name'],
+                            deviceID: device['id'].toString(),  // deviceID를 String으로 변환하여 전달
+                          ));
                         },
                       ),
                       if (isLastItem)

@@ -1,74 +1,46 @@
-import 'package:flutter/material.dart';
-import 'package:real_test/Color/constants.dart';
+import 'dart:typed_data';
 
-class GestureListPart extends StatelessWidget{
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:real_test/Color/constants.dart';
+import 'package:real_test/Controllers/Gesture/Gesture_List_Part_Controller.dart';
+
+class GestureListPart extends StatelessWidget {
+  final GestureListPartController controller = Get.find<GestureListPartController>();
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView(
-        children: [
-          ListTile(
-            leading: SizedBox(
-              width: 50,
-              height: 50,
-              child: Image.asset('assets/on.png'),
-            ),
-            title: const Text('기능이름: ON'),
-            subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-          ),
-          const Divider(color: AppColors.greyLineColor, thickness: 0.5),
-          ListTile(
-            leading: SizedBox(
-              width: 50,
-              height: 50,
-              child: Image.asset('assets/off.png'),
-            ),
-            title: const Text('기능이름: OFF'),
-            subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-          ),
-          const Divider(color: AppColors.greyLineColor, thickness: 0.5),
-          ListTile(
-            leading: SizedBox(
-              width: 50,
-              height: 50,
-              child: Image.asset('assets/skills.png'),
-            ),
-            title: const Text('기능이름: 바람 세기'),
-            subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-          ),
-          const Divider(color: AppColors.greyLineColor, thickness: 0.5),
-          ListTile(
-            leading: SizedBox(
-              width: 50,
-              height: 50,
-              child: Image.asset('assets/skills.png'),
-            ),
-            title: const Text('기능이름: 회전'),
-            subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-          ),
-          const Divider(color: AppColors.greyLineColor, thickness: 0.5),
-          ListTile(
-            leading: SizedBox(
-              width: 50,
-              height: 50,
-              child: Image.asset('assets/skills.png'),
-            ),
-            title: const Text('기능이름: 작동 시간 예약'),
-            subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-          ),
-          const Divider(color: AppColors.greyLineColor, thickness: 0.5),
-          ListTile(
-            leading: SizedBox(
-              width: 50,
-              height: 50,
-              child: Image.asset('assets/skills.png'),
-            ),
-            title: const Text('기능이름: 자연풍'),
-            subtitle: const Text('제스처 설명: 눈동자를 이러쿵 저러쿵 한다.'),
-          ),
-          const Divider(color: AppColors.greyLineColor, thickness: 0.5),
-        ],
-      ),
+      child: Obx(() {
+        if (controller.gestures.isEmpty) {
+          return Center(child: Text('No gestures available'));
+        }
+
+        return ListView.builder(
+          itemCount: controller.gestures.length,
+          itemBuilder: (context, index) {
+            final gesture = controller.gestures[index];
+            final image = gesture['image'] as Uint8List?;
+            final name = gesture['name'] as String?;
+
+            return Column(
+              children: [
+                ListTile(
+                  leading: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: image != null
+                        ? Image.memory(image)
+                        : Image.asset('assets/placeholder.png'), // Placeholder image if image data is null
+                  ),
+                  title: Text('기능이름: $name'),
+                ),
+                const Divider(color: AppColors.greyLineColor, thickness: 0.5),
+              ],
+            );
+          },
+        );
+      }),
     );
   }
 }

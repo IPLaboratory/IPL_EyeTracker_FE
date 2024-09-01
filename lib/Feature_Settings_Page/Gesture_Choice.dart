@@ -35,7 +35,7 @@ class GestureChoice extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '제스처명 : $gestureName',
+                          '제스처 아이디 : $gestureName',
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 5),

@@ -5,7 +5,8 @@ import 'package:real_test/Color/constants.dart';
 import 'package:real_test/Controllers/UserRegistration/Machine_Recogniton_Controller.dart'; // Controller import
 import 'package:real_test/Feature_Settings_Page/Main_Settings.dart';
 import 'package:real_test/Dismiss_Keyboard.dart'; // DismissKeyboard import
-import 'package:image_picker/image_picker.dart'; // ImagePicker import
+import 'package:image_picker/image_picker.dart';
+import 'package:real_test/User_Registration_Page/Widget/User_Registration.dart'; // ImagePicker import
 
 class ConnectedDevicePart extends StatefulWidget {
   @override
@@ -127,13 +128,13 @@ class _ConnectedDevicePartState extends State<ConnectedDevicePart> {
                 await _registerDevice();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MainSettingsPage()),
+                  MaterialPageRoute(builder: (context) => UserRegistrationPage()),
                 );
               },
               child: const Text(
-                '기능 설정하러 가기',
+                '기기 등록하기',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   color: AppColors.textColor,
                 ),
               ),
