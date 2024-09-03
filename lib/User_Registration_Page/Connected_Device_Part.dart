@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:real_test/Color/constants.dart';
 import 'package:real_test/Controllers/UserRegistration/Machine_Recogniton_Controller.dart'; // Controller import
-import 'package:real_test/Feature_Settings_Page/Main_Settings.dart';
 import 'package:real_test/Dismiss_Keyboard.dart'; // DismissKeyboard import
 import 'package:image_picker/image_picker.dart';
 import 'package:real_test/User_Registration_Page/Widget/User_Registration.dart'; // ImagePicker import
