@@ -226,7 +226,7 @@ class CameraPageContent extends StatelessWidget {
                   Get.offNamedUntil('/mainProfile', ModalRoute.withName('/home')); // 로그인 페이지를 남기고 스택을 지우고 프로필 페이지로 이동
                 },
                 child: const Text(
-                  '아니오',
+                  '아니요',
                   style: TextStyle(
                     fontSize: 18, // 텍스트 크기 조절
                   ),

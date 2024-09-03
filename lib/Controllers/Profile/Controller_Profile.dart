@@ -4,9 +4,10 @@ import 'dart:convert';
 import 'dart:typed_data'; // 바이너리 데이터를 처리하기 위해 추가
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/material.dart'; // WidgetsBindingObserver를 사용하기 위해 추가
 import 'package:real_test/Controllers/Profile/Models_Profile.dart';
 
-class ControllerProfile extends GetxController {
+class ControllerProfile extends GetxController with WidgetsBindingObserver {
   var profiles = <ModelsProfile>[].obs; // 전체 프로필 목록을 저장할 Observable 리스트
   var imageBytes = <Rx<Uint8List?>>[].obs; // 이미지 바이너리 데이터를 저장할 리스트
   var homeId = 0.obs;
@@ -14,11 +15,21 @@ class ControllerProfile extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this); // 앱 생명주기 관찰자 추가
   }
 
   @override
   void onClose() {
+    WidgetsBinding.instance.removeObserver(this); // 앱 생명주기 관찰자 제거
     super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // 앱이 포커스를 얻었을 때 실행되는 코드
+      fetchProfiles();
+    }
   }
 
   @override
