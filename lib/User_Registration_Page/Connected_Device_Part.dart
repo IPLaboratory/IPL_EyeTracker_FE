@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:real_test/Color/constants.dart';
 import 'package:real_test/Controllers/UserRegistration/Machine_Recogniton_Controller.dart'; // Controller import
 import 'package:real_test/Dismiss_Keyboard.dart'; // DismissKeyboard import
-import 'package:image_picker/image_picker.dart';
-import 'package:real_test/User_Registration_Page/Widget/User_Registration.dart'; // ImagePicker import
 
 class ConnectedDevicePart extends StatefulWidget {
   @override
@@ -35,7 +35,6 @@ class _ConnectedDevicePartState extends State<ConnectedDevicePart> {
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-
     setState(() {
       if (pickedFile != null) {
         _imageFile = pickedFile;
@@ -46,10 +45,41 @@ class _ConnectedDevicePartState extends State<ConnectedDevicePart> {
   Future<void> _registerDevice() async {
     if (_textController.text.isNotEmpty && _imageFile != null) {
       File imageFile = File(_imageFile!.path);
-      await controller.sendDeviceToServer(_textController.text, imageFile);
+      bool success = await controller.sendDeviceToServer(_textController.text, imageFile);
+
+      if (success) {
+        // 서버 전송 성공 시 스낵바 표시
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: '등록 성공!',
+            message: '기기가 성공적으로 등록되었습니다!\n등록된 기기 페이지로 돌아가 주세요!',
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      } else {
+        // 서버 전송 실패 시 스낵바 표시
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: '등록 실패',
+            message: '기기 등록에 실패했습니다. 다시 시도해 주세요.',
+            contentType: ContentType.failure,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
     } else {
-      // Handle the case where either the text field is empty or no image is selected
-      print('Device name or image is missing');
+      // 필드가 비어있거나 이미지가 선택되지 않았을 때 처리
       Get.snackbar('Error', 'Device name or image is missing');
     }
   }
@@ -123,13 +153,7 @@ class _ConnectedDevicePartState extends State<ConnectedDevicePart> {
                   borderRadius: BorderRadius.circular(4.0),
                 ),
               ),
-              onPressed: () async {
-                await _registerDevice();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserRegistrationPage()),
-                );
-              },
+              onPressed: _registerDevice, // 기기 등록하기 버튼 클릭 시 호출
               child: const Text(
                 '기기 등록하기',
                 style: TextStyle(
