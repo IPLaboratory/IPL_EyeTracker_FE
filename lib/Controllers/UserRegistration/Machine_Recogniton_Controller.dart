@@ -12,10 +12,12 @@ class MachineRecognitionController extends GetxController {
   final LoginController loginController = Get.find(); // LoginController 인스턴스 가져오기
   RxString deviceId = ''.obs; // Device ID를 저장할 변수 추가
 
+  // 기기를 등록 목록에 추가하는 메서드
   void registerDevice(String deviceName, String imagePath) {
     registeredDevices.add(Device(name: deviceName, description: '', imagePath: imagePath));
   }
 
+  // 등록된 기기의 이미지를 업데이트하는 메서드
   void updateDeviceImage(String deviceName, String newImagePath) {
     for (var device in registeredDevices) {
       if (device.name == deviceName) {
@@ -26,43 +28,57 @@ class MachineRecognitionController extends GetxController {
     }
   }
 
-  Future<void> sendDeviceToServer(String deviceName, File imageFile) async {
-    final String? serverUrl = dotenv.env['ADD_DEVICE'];
+  // 서버로 기기를 등록하는 메서드 (성공 시 true, 실패 시 false 반환)
+  Future<bool> sendDeviceToServer(String deviceName, File imageFile) async {
+    final String? serverUrl = dotenv.env['ADD_DEVICE']; // 환경변수에서 서버 URL 가져오기
     if (serverUrl == null) {
       print('Server URL not found in .env file');
-      return;
+      return false;
     }
 
-    var request = http.MultipartRequest('POST', Uri.parse(serverUrl));
-    request.fields['homeId'] = loginController.homeId.value.toString(); // homeId를 String 값으로 전송
-    request.fields['name'] = deviceName; // 사용자 입력 이름을 String 값으로 전송
-    request.files.add(await http.MultipartFile.fromPath('photo', imageFile.path)); // 파일을 photo로 전송
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(serverUrl));
+      request.fields['homeId'] = loginController.homeId.value.toString(); // homeId를 전송
+      request.fields['name'] = deviceName; // 기기 이름을 전송
+      request.files.add(await http.MultipartFile.fromPath('photo', imageFile.path)); // 사진 파일 전송
 
-    var response = await request.send();
+      var response = await request.send();
 
-    if (response.statusCode == 200) {
-      var responseData = await http.Response.fromStream(response);
-      var responseBody = jsonDecode(responseData.body);
-      if (responseBody['status'] == '200') {
-        print('Device registered successfully');
-        print('Device ID: ${responseBody['data']['id']}');
-        print('Device Name: ${responseBody['data']['name']}');
-        print('Photo Path: ${responseBody['data']['photoPath']}');
-        print('Home ID: ${responseBody['data']['homeId']}');
-        deviceId.value = responseBody['data']['id'].toString(); // Device ID 저장
+      // 서버 응답이 성공적일 때
+      if (response.statusCode == 200) {
+        var responseData = await http.Response.fromStream(response);
+        var responseBody = jsonDecode(responseData.body);
+
+        // 서버에서 반환된 데이터가 성공일 때
+        if (responseBody['status'] == '200') {
+          deviceId.value = responseBody['data']['id'].toString(); // Device ID 저장
+          print('Device registered successfully');
+          return true;
+        } else {
+          print('Failed to register device: ${responseBody['message']}');
+          return false;
+        }
       } else {
-        print('Failed to register device: ${responseBody['message']}');
+        print('Failed to register device: ${response.statusCode}');
+        return false;
       }
-    } else {
-      print('Failed to register device');
+    } catch (e) {
+      // 예외 처리 (서버 연결 오류 등)
+      print('Error occurred while registering device: $e');
+      return false;
     }
   }
 }
 
+// Device 클래스: 등록된 기기 정보를 담는 데이터 모델
 class Device {
   String name;
   String description;
   String imagePath;
 
-  Device({required this.name, required this.description, required this.imagePath});
+  Device({
+    required this.name,
+    required this.description,
+    required this.imagePath,
+  });
 }
