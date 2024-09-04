@@ -81,7 +81,7 @@ class GestureChoice extends StatelessWidget {
     return Obx(() {
       if (controller.gestures.isEmpty) {
         return const Center(
-          child: Text('No gestures available'),
+          child: Text('사용 가능한 제스처가 없습니다.'),
         );
       }
 

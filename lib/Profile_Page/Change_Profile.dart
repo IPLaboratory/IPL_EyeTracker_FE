@@ -8,7 +8,7 @@ import '../Controllers/Profile/Models_Profile.dart'; // ModelsProfile 임포트
 
 class ChangeProfilePage extends StatefulWidget {
   final ModelsProfile profile;
-  final Uint8List? imageBytes; // MainProfilePage에서 전달받을 이미지 바이트 추가
+  final Uint8List? imageBytes; // MainProfilePage에서 전달 받을 이미지 바이트 추가
 
   const ChangeProfilePage({
     Key? key,
@@ -47,7 +47,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         return Scaffold(
           backgroundColor: const Color(0xFFFFF9D0), // 배경색 설정
           appBar: AppBar(
-            scrolledUnderElevation: 0, //스크롤시 AppBar 그림자 색 0으로 해주기
+            scrolledUnderElevation: 0, //스크롤 시 AppBar 그림자 색 0으로 해주기
             backgroundColor: const Color(0xFFFFF9D0),
             elevation: 0, // 그림자 제거
             actions: [
@@ -118,29 +118,32 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFCAF4FF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0), // 양옆에 16.0의 여백 추가
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFCAF4FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        if (controller.selectedImage.value != null) {
-                          controller.uploadImage(widget.profile.id, nameController.text, controller.selectedImage.value!.path);
-                        } else {
-                          controller.uploadjustname(widget.profile.id, nameController.text);
-                        }
-                      },
-                      child: const Text(
-                        '저장',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                        onPressed: () {
+                          if (controller.selectedImage.value != null) {
+                            controller.uploadImage(widget.profile.id, nameController.text, controller.selectedImage.value!.path);
+                          } else {
+                            controller.uploadjustname(widget.profile.id, nameController.text);
+                          }
+                        },
+                        child: const Text(
+                          '프로필 저장하기',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
