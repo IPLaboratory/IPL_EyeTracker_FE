@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // SVG 파일 사용을 위한 패키지
 import 'package:get/get.dart';
-import 'dart:convert';// base64Decode 함수 사용을 위해 추가
 import '../Camera_Page/Camera_Page.dart'; // CameraPage 파일 임포트
 import '../Profile_Page/Change_Profile.dart'; // ChangeProfile 파일 임포트
 import '../User_Registration_Page/Widget/User_Registration.dart'; // UserRegistrationPage 파일 임포트
 import '../Controllers/Profile/Main_Profile_Controller.dart'; // MainProfileController 임포트
 import '../Controllers/Profile/Controller_Profile.dart'; // ControllerProfile 임포트
-import '../Color/constants.dart';
-
-// 생략된 import와 클래스 선언
+import '../Controllers/Profile/Mapping_Controller.dart'; // MappingController 임포트
+import '../Color/constants.dart'; // 색상 상수 사용
 
 class MainProfilePage extends StatelessWidget {
   const MainProfilePage({super.key});
@@ -17,6 +15,7 @@ class MainProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ControllerProfile profileController = Get.put(ControllerProfile());
+    final MappingController mappingController = Get.put(MappingController()); // MappingController 추가
 
     return GetBuilder<MainProfileController>(
       init: MainProfileController(),
@@ -115,7 +114,15 @@ class MainProfilePage extends StatelessWidget {
                                       final imageBytes = profileController.imageBytes[index].value;
 
                                       return GestureDetector(
-                                        onTap: () => Get.to(() => UserRegistrationPage()),
+                                        onTap: () async {
+                                          await mappingController.sendProfileData(
+                                            profileController.homeId.value,  // ControllerProfile에서 homeId 가져오기
+                                            profile.id,
+                                            profile.name,
+                                          );
+                                          // 서버 전송 후 UserRegistrationPage로 이동
+                                          Get.to(() => UserRegistrationPage());
+                                        },
                                         child: Container(
                                           width: 150,
                                           height: 170,
@@ -166,7 +173,6 @@ class MainProfilePage extends StatelessWidget {
                                     }),
                                   ),
                                 ),
-                                // 프로필 개수가 5개보다 작으면 빈 공간 채우기
                                 if (profileController.profiles.length < 5) const SizedBox(height: 50),
                               ],
                             ),
