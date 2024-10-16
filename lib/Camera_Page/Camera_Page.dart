@@ -97,31 +97,41 @@ class CameraPageContent extends StatelessWidget {
               const SizedBox(height: 24),
               Obx(() {
                 if (cameraController.videoPath.value == null) {
-                  return SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFCAF4FF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                      ),
-                      onPressed: () async {
-                        final result = await Get.to(() => CameraServicePage());
+                  return Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFCAF4FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          onPressed: () async {
+                            final result = await Get.to(() => CameraServicePage());
 
-                        if (result != null) {
-                          cameraController.initializeVideoPlayer(result);
-                        }
-                      },
-                      child: const Text(
-                        '카메라 열기',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
+                            if (result != null) {
+                              cameraController.initializeVideoPlayer(result);
+                            }
+                          },
+                          child: const Text(
+                            '카메라 열기',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        '상, 하, 좌, 우 중앙을 2초씩 바라봐주세요.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
                   );
                 } else {
                   return Column(

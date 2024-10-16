@@ -12,6 +12,9 @@ class ControllerProfile extends GetxController with WidgetsBindingObserver {
   var imageBytes = <Rx<Uint8List?>>[].obs; // 이미지 바이너리 데이터를 저장할 리스트
   var homeId = 0.obs;
 
+  // 새로운 변수: 매핑된 데이터를 저장할 리스트
+  var mappedProfiles = <Map<String, dynamic>>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -43,6 +46,11 @@ class ControllerProfile extends GetxController with WidgetsBindingObserver {
     fetchProfiles();
   }
 
+  // 매핑된 데이터를 추출하는 함수 추가
+  List<Map<String, dynamic>> getMappedProfiles() {
+    return mappedProfiles.toList(); // 저장된 매핑 데이터 리스트 반환
+  }
+
   Future<void> fetchProfiles() async {
     final url = dotenv.env['FIND_ALL_MEMBERS_URL'] ?? '';
     if (url.isEmpty) {
@@ -62,6 +70,10 @@ class ControllerProfile extends GetxController with WidgetsBindingObserver {
 
           profiles.clear();
           imageBytes.clear();
+          mappedProfiles.clear(); // 이전에 저장된 매핑 데이터 초기화
+
+          // 홈 아이디 별로 멤버들을 저장할 Map
+          Map<int, List<ModelsProfile>> groupedProfiles = {};
 
           for (String part in parts) {
             if (part.contains("Content-Disposition")) {
@@ -73,26 +85,46 @@ class ControllerProfile extends GetxController with WidgetsBindingObserver {
 
                 String name = jsonData['name'];
                 int memberId = jsonData['memberId'];
+                int homeIdFromServer = homeId.value; // 서버에서 가져온 homeId
 
                 ModelsProfile profile = ModelsProfile(
                   id: memberId,
                   name: name,
                 );
-                profiles.add(profile);
-                imageBytes.add(Rx<Uint8List?>(null));
 
-              } else if (part.contains('name="photo"')) {
-                int headerEndIndex = part.indexOf("\r\n\r\n") + 4;
-                List<int> imageBinaryData = part.substring(headerEndIndex).trim().codeUnits;
-                var bytes = Uint8List.fromList(imageBinaryData);
-
-                int imageIndex = profiles.length - 1;
-                if (imageIndex >= 0 && imageIndex < imageBytes.length) {
-                  imageBytes[imageIndex].value = bytes;
+                // 홈 아이디별로 멤버를 그룹화
+                if (!groupedProfiles.containsKey(homeIdFromServer)) {
+                  groupedProfiles[homeIdFromServer] = [];
                 }
+                groupedProfiles[homeIdFromServer]!.add(profile);
+
+                // 멤버 아이디 로그 출력
+                print('Member ID: $memberId, Name: $name, Home ID: $homeIdFromServer');
               }
             }
           }
+
+          // 그룹별로 멤버 아이디 정렬 후 프로필 매핑
+          groupedProfiles.forEach((homeIdKey, memberList) {
+            memberList.sort((a, b) => a.id.compareTo(b.id)); // 멤버 아이디로 정렬
+
+            for (var i = 0; i < memberList.length; i++) {
+              final profile = memberList[i];
+              // 매핑된 결과 로그 출력
+              print('Mapped Profile: Home ID: $homeIdKey, Profile ${i + 1}: Member ID: ${profile.id}, Name: ${profile.name}');
+
+              // 매핑된 데이터 저장
+              mappedProfiles.add({
+                'homeId': homeIdKey,
+                'profileIndex': i + 1,
+                'memberId': profile.id,
+                'name': profile.name,
+              });
+
+              profiles.add(profile);
+              imageBytes.add(Rx<Uint8List?>(null)); // 빈 이미지 추가
+            }
+          });
 
         } else {
           print("Unexpected Content-Type: $contentType");

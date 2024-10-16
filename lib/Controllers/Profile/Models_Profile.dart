@@ -1,5 +1,5 @@
 class ModelsProfile {
-  final int id; // null이 될 수 없도록 수정
+  final int id;
   final String name;
   final String? photoPath;
   final String? photoBase64;
